@@ -6,6 +6,7 @@ from pathlib import Path
 from datetime import datetime
 import sys
 import time
+import venv
 
 # --------------------------
 # Config
@@ -29,6 +30,8 @@ CRITICAL_SECRETS = [
     ".env",
 ]
 
+VENV_DIR = Path(".venv")
+
 
 # --------------------------
 # Logging
@@ -44,7 +47,11 @@ def log(msg):
 # Helper
 # --------------------------
 def run(cmd, **kwargs):
-    return subprocess.run(cmd, shell=False, check=True, **kwargs)
+    try:
+        return subprocess.run(cmd, shell=False, check=True, **kwargs)
+    except subprocess.CalledProcessError as e:
+        log(f"❌ Command failed: {cmd} -> {e}")
+        return None
 
 
 # --------------------------
@@ -59,7 +66,6 @@ def ensure_git():
         ])
     try:
         run(["git", "fetch", "origin"])
-        # stash ก่อน checkout ป้องกัน overwrite
         run(["git", "stash", "push", "-m", "auto-stash"])
         run(["git", "checkout", "-B", "main", "origin/main"])
         run(["git", "stash", "pop"])
@@ -68,16 +74,13 @@ def ensure_git():
 
 
 def git_commit_push(message="Auto deploy commit"):
-    try:
-        run(["git", "add", "-A"])
-        run(["git", "commit", "-m", message, "--allow-empty"])
-        run([
-            "git", "push", "--set-upstream",
-            f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
-        ])
-        log("✅ Pushed to GitHub")
-    except subprocess.CalledProcessError as e:
-        log(f"❌ Git push failed: {e}")
+    run(["git", "add", "-A"])
+    run(["git", "commit", "-m", message, "--allow-empty"])
+    run([
+        "git", "push", "--set-upstream",
+        f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
+    ])
+    log("✅ Git push done")
 
 
 # --------------------------
@@ -92,17 +95,16 @@ def restore_files():
                 run(["git", "checkout", "origin/main", "--", f])
                 restored.append(f)
             except subprocess.CalledProcessError:
-                # สร้าง default ถ้าไม่มี
                 if path.suffix == ".py":
                     path.write_text("# default placeholder\n")
                 elif path.name == "requirements.txt":
                     path.write_text("flask\n")
-                elif path.name == "templates/index.html":
+                elif path.name == "index.html":
                     path.parent.mkdir(parents=True, exist_ok=True)
                     path.write_text(
                         "<!DOCTYPE html>\n<html><head></head><body></body></html>"
                     )
-                elif path.name == "static":
+                else:
                     path.mkdir(parents=True, exist_ok=True)
                 restored.append(f)
     if restored:
@@ -118,62 +120,59 @@ def restore_secrets():
             shutil.copy(example_path, path)
             restored.append(s)
     if restored:
-        log(f"✅ Restored secrets from examples: {restored}")
+        log(f"✅ Restored secrets: {restored}")
 
 
 # --------------------------
-# Dependencies
+# Virtual environment + dependencies
 # --------------------------
-def install_dependencies():
-    req_file = Path("requirements.txt")
-    if req_file.exists():
-        try:
-            if "/nix/store" in sys.executable:
-                log("⚠️ Skipping pip install on Nix environment")
-                return
-            run([sys.executable, "-m", "pip", "install", "-r", str(req_file)])
-            log("✅ Dependencies installed")
-        except subprocess.CalledProcessError as e:
-            log(f"❌ Failed to install dependencies: {e}")
+def ensure_venv():
+    if not VENV_DIR.exists():
+        log("🔹 Creating virtual environment...")
+        venv.create(VENV_DIR, with_pip=True)
+    pip_path = VENV_DIR / "bin" / "pip"
+    python_path = VENV_DIR / "bin" / "python"
+    if Path("requirements.txt").exists():
+        log("🔹 Installing dependencies in virtualenv...")
+        run([str(pip_path), "install", "-r", "requirements.txt"])
+    return python_path
 
 
 # --------------------------
 # Deploy
 # --------------------------
 def deploy_vercel():
-    if VERCEL_TOKEN:
-        try:
-            run(["vercel", "--version"])
-            run(["vercel", "--prod", "--confirm"])
-            log("✅ Deployed to Vercel")
-        except FileNotFoundError:
-            log("⚠️ Vercel CLI not found, skipping deploy")
-        except subprocess.CalledProcessError as e:
-            log(f"❌ Vercel deploy failed: {e}")
+    if not VERCEL_TOKEN:
+        log("⚠️ VERCEL_TOKEN not set, skipping deploy")
+        return
+    if shutil.which("vercel") is None:
+        log("⚠️ Vercel CLI not found, skipping deploy")
+        return
+    run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN])
+    log("✅ Deployed to Vercel")
 
 
 def deploy_firebase():
-    if FIREBASE_TOKEN:
-        try:
-            run(["firebase", "--version"])
-            run(["firebase", "deploy", "--only", "hosting"])
-            log("✅ Deployed to Firebase")
-        except FileNotFoundError:
-            log("⚠️ Firebase CLI not found, skipping deploy")
-        except subprocess.CalledProcessError as e:
-            log(f"❌ Firebase deploy failed: {e}")
+    if not FIREBASE_TOKEN:
+        log("⚠️ FIREBASE_TOKEN not set, skipping deploy")
+        return
+    if shutil.which("firebase") is None:
+        log("⚠️ Firebase CLI not found, skipping deploy")
+        return
+    run(["firebase", "deploy", "--only", "hosting", "--token", FIREBASE_TOKEN])
+    log("✅ Deployed to Firebase")
 
 
 # --------------------------
 # Main loop
 # --------------------------
 def main_loop():
+    python_path = ensure_venv()
     while True:
         try:
             ensure_git()
             restore_files()
             restore_secrets()
-            install_dependencies()
             git_commit_push()
             deploy_vercel()
             deploy_firebase()
