@@ -60,6 +60,7 @@ def run(cmd, **kwargs):
 # Git helpers
 # --------------------------
 def ensure_git():
+    """Initialize git if missing, fetch origin, checkout main safely."""
     if not Path(".git").exists():
         run(["git", "init"])
         run([
@@ -68,8 +69,11 @@ def ensure_git():
         ])
     try:
         run(["git", "fetch", "origin"])
+        # Save local changes
         run(["git", "stash", "push", "-m", "auto-stash"])
+        # Checkout main
         run(["git", "checkout", "-B", "main", "origin/main"])
+        # Restore stash
         try:
             run(["git", "stash", "pop"])
         except Exception:
@@ -79,15 +83,17 @@ def ensure_git():
 
 
 def git_commit_push(message="Auto deploy commit"):
-    # Add all files
-    run(["git", "add", "-A"])
-    # Remove secrets from staging to avoid push protection
-    if SERVICE_ACCOUNT_PATH.exists():
-        run(["git", "reset", str(SERVICE_ACCOUNT_PATH)])
-    for secret in CRITICAL_SECRETS:
-        run(["git", "reset", secret])
-    # Commit and push
+    # Add all except secrets
+    secrets_paths = [str(s)
+                     for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
+    all_files = subprocess.getoutput("git ls-files").splitlines()
+    files_to_add = [f for f in all_files if f not in secrets_paths]
+
+    if files_to_add:
+        run(["git", "add"] + files_to_add)
     run(["git", "commit", "-m", message, "--allow-empty"])
+
+    # Push
     run([
         "git", "push", "--set-upstream",
         f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
@@ -205,7 +211,7 @@ def deploy_firebase():
         "firebase", "deploy", "--only", "hosting", "--project",
         FIREBASE_PROJECT
     ])
-    log("✅ Deployed to Firebase using local Service Account")
+    log("✅ Deployed to Firebase using Service Account")
 
 
 # --------------------------
@@ -219,6 +225,15 @@ def main_loop():
             restore_files()
             restore_secrets()
             run_app(python_path)
+
+            # Fix: exclude secrets from git reset
+            for secret in CRITICAL_SECRETS:
+                path = Path(secret)
+                tracked_files = subprocess.getoutput(
+                    "git ls-files").splitlines()
+                if path.exists() and (str(path) in tracked_files):
+                    run(["git", "reset", secret])
+
             git_commit_push()
             deploy_vercel()
             deploy_firebase()
