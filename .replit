@@ -1,2 +1,2 @@
 run = "python3 check_status_up.py"
-modules = ["python-3.11"]
+modules = ["nodejs-20", "python-3.11"]
