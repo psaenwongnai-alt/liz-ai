@@ -31,6 +31,7 @@ CRITICAL_SECRETS = [
 ]
 
 VENV_DIR = Path(".venv")
+APP_PROCESS = None  # handle subprocess
 
 
 # --------------------------
@@ -139,6 +140,22 @@ def ensure_venv():
 
 
 # --------------------------
+# Run app.py
+# --------------------------
+def run_app(python_path):
+    global APP_PROCESS
+    if APP_PROCESS and APP_PROCESS.poll() is None:
+        log("🔹 app.py already running, skipping start")
+        return
+    if Path("app.py").exists():
+        log("🔹 Starting app.py in background...")
+        APP_PROCESS = subprocess.Popen([str(python_path), "app.py"])
+        log(f"✅ app.py started with PID {APP_PROCESS.pid}")
+    else:
+        log("⚠️ app.py not found, cannot start")
+
+
+# --------------------------
 # Deploy
 # --------------------------
 def deploy_vercel():
@@ -173,6 +190,7 @@ def main_loop():
             ensure_git()
             restore_files()
             restore_secrets()
+            run_app(python_path)
             git_commit_push()
             deploy_vercel()
             deploy_firebase()
