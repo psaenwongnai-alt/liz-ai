@@ -79,7 +79,7 @@ def restore_files():
                 path.write_text("# default placeholder\n")
             elif path.name == "requirements.txt":
                 path.write_text("flask\n")
-            elif path.name == "index.html":
+            elif path.name.endswith("index.html"):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(
                     "<!DOCTYPE html>\n<html><head></head><body></body></html>")
@@ -95,6 +95,38 @@ def restore_secrets():
         if not path.exists() and example_path.exists():
             shutil.copy(example_path, path)
             log(f"✅ Restored secret: {s}")
+
+
+# --------------------------
+# Firebase config
+# --------------------------
+def restore_firebase_config():
+    firebase_json = Path("firebase.json")
+    public_dir = Path("public")
+    index_html = public_dir / "index.html"
+
+    if not firebase_json.exists():
+        firebase_json.write_text("""{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [ { "source": "**", "destination": "/index.html" } ]
+  }
+}""")
+        log("✅ Created default firebase.json")
+
+    if not public_dir.exists():
+        public_dir.mkdir(parents=True)
+        log("✅ Created public/ folder")
+
+    if not index_html.exists():
+        index_html.write_text(
+            "<!DOCTYPE html>\n<html><head></head><body></body></html>")
+        log("✅ Created public/index.html")
 
 
 # --------------------------
@@ -161,28 +193,23 @@ def deploy_vercel():
     if not VERCEL_TOKEN or shutil.which("vercel") is None:
         log("⚠️ Vercel token missing or CLI not found, skipping deploy")
         return
-    try:
-        run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN])
-        log("✅ Deployed to Vercel")
-    except Exception as e:
-        log(f"❌ Vercel deploy failed: {e}")
+    run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN])
+    log("✅ Deployed to Vercel")
 
 
 def deploy_firebase():
+    restore_firebase_config()
     if not SERVICE_ACCOUNT_PATH.exists() or shutil.which("firebase") is None:
         log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy"
             )
         return
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(
         SERVICE_ACCOUNT_PATH.resolve())
-    try:
-        run([
-            "firebase", "deploy", "--only", "hosting", "--project",
-            FIREBASE_PROJECT
-        ])
-        log("✅ Deployed to Firebase")
-    except Exception as e:
-        log(f"❌ Firebase deploy failed: {e}")
+    run([
+        "firebase", "deploy", "--only", "hosting", "--project",
+        FIREBASE_PROJECT
+    ])
+    log("✅ Deployed to Firebase")
 
 
 # --------------------------
