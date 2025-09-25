@@ -4,9 +4,9 @@ import subprocess
 import shutil
 from pathlib import Path
 from datetime import datetime
-import sys
 import time
 import venv
+import atexit
 
 # --------------------------
 # Config
@@ -14,7 +14,8 @@ import venv
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 GITHUB_REPO = "psaenwongnai-alt/liz-ai"
 VERCEL_TOKEN = os.environ.get("VERCEL_TOKEN")
-FIREBASE_TOKEN = os.environ.get("FIREBASE_TOKEN")
+SERVICE_ACCOUNT_PATH = Path("secrets/firebase-service-account.json")
+FIREBASE_PROJECT = "liz-ai-project"
 
 CHECK_INTERVAL = 30
 LOG_FILE = "deploy_history.log"
@@ -69,23 +70,33 @@ def ensure_git():
         run(["git", "fetch", "origin"])
         run(["git", "stash", "push", "-m", "auto-stash"])
         run(["git", "checkout", "-B", "main", "origin/main"])
-        run(["git", "stash", "pop"])
+        try:
+            run(["git", "stash", "pop"])
+        except Exception:
+            log("⚠️ No stash to pop or conflict, skipping.")
     except subprocess.CalledProcessError:
         log("⚠️ Cannot checkout main from origin/main, maybe empty repo.")
 
 
 def git_commit_push(message="Auto deploy commit"):
+    # Add all files
     run(["git", "add", "-A"])
+    # Remove secrets from staging to avoid push protection
+    if SERVICE_ACCOUNT_PATH.exists():
+        run(["git", "reset", str(SERVICE_ACCOUNT_PATH)])
+    for secret in CRITICAL_SECRETS:
+        run(["git", "reset", secret])
+    # Commit and push
     run(["git", "commit", "-m", message, "--allow-empty"])
     run([
         "git", "push", "--set-upstream",
         f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
     ])
-    log("✅ Git push done")
+    log("✅ Git push done (secret excluded)")
 
 
 # --------------------------
-# Restore files
+# Restore files and secrets
 # --------------------------
 def restore_files():
     restored = []
@@ -140,7 +151,7 @@ def ensure_venv():
 
 
 # --------------------------
-# Run app.py
+# Run app.py persistently
 # --------------------------
 def run_app(python_path):
     global APP_PROCESS
@@ -153,6 +164,17 @@ def run_app(python_path):
         log(f"✅ app.py started with PID {APP_PROCESS.pid}")
     else:
         log("⚠️ app.py not found, cannot start")
+
+
+# Ensure app process is terminated when script exits
+def cleanup():
+    global APP_PROCESS
+    if APP_PROCESS:
+        log("⏹️ Terminating app.py process...")
+        APP_PROCESS.terminate()
+
+
+atexit.register(cleanup)
 
 
 # --------------------------
@@ -170,14 +192,20 @@ def deploy_vercel():
 
 
 def deploy_firebase():
-    if not FIREBASE_TOKEN:
-        log("⚠️ FIREBASE_TOKEN not set, skipping deploy")
+    if not SERVICE_ACCOUNT_PATH.exists():
+        log("⚠️ Firebase Service Account JSON not found locally, skipping deploy"
+            )
         return
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(
+        SERVICE_ACCOUNT_PATH.resolve())
     if shutil.which("firebase") is None:
         log("⚠️ Firebase CLI not found, skipping deploy")
         return
-    run(["firebase", "deploy", "--only", "hosting", "--token", FIREBASE_TOKEN])
-    log("✅ Deployed to Firebase")
+    run([
+        "firebase", "deploy", "--only", "hosting", "--project",
+        FIREBASE_PROJECT
+    ])
+    log("✅ Deployed to Firebase using local Service Account")
 
 
 # --------------------------
@@ -194,6 +222,9 @@ def main_loop():
             git_commit_push()
             deploy_vercel()
             deploy_firebase()
+        except KeyboardInterrupt:
+            log("⏹️ KeyboardInterrupt received, stopping loop...")
+            break
         except Exception as e:
             log(f"❌ Unexpected error: {e}")
         log(f"⏳ Sleeping {CHECK_INTERVAL}s...")
