@@ -1,2 +1,6 @@
 run = "python3 check_status_up.py"
 modules = ["nodejs-20", "python-3.11"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
