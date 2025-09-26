@@ -14,8 +14,8 @@ SESSION_FILE = Path("liz_memory.json")
 SLEEP_TIMEOUT = 15 * 60  # 15 นาที idle
 LANGUAGES = ["th", "en", "zh", "ko", "ja"]
 MODES = [
-    "friendly", "serious", "advice", "fun", "music", "translate", "tts",
-    "summary"
+    "friendly", "serious", "advice", "fun", "music", "translate", "summary",
+    "tts"
 ]
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -29,14 +29,19 @@ app = Flask(__name__)
 CORS(app)
 
 # -----------------------------
-# Memory
+# Memory & Trait
 # -----------------------------
 memory = {
     "last_active": time.time(),
     "history": [],
     "liz_on": True,
-    "mood": "neutral",
-    "mode": "friendly"
+    "mode": "friendly",
+    # Trait / Mood
+    "mood": "calm",
+    "empathy": 80,
+    "curiosity": 60,
+    "fun": 50,
+    "serious": 70
 }
 
 
@@ -81,21 +86,18 @@ def search_youtube(query):
 # -----------------------------
 def chat_with_liz(user_input, lang="auto", mode=None):
     global memory
-
     now = time.time()
 
-    # ตรวจสอบ idle timeout
+    # Idle check
     if now - memory.get("last_active", now) > SLEEP_TIMEOUT:
         memory["liz_on"] = False
 
-    # ถ้า Liz กำลังพัก
     if not memory.get("liz_on", True):
-        memory["liz_on"] = True  # ปลุก Liz
+        memory["liz_on"] = True  # ปลุก
         memory["last_active"] = now
         save_memory()
         return "Liz กำลังพักอยู่... เรียกใช้งานครั้งนี้ปลุก Liz แล้ว"
 
-    # อัปเดต last_active
     memory["last_active"] = now
     memory["history"].append({"role": "user", "content": user_input})
     save_memory()
@@ -154,13 +156,16 @@ def chat_with_liz(user_input, lang="auto", mode=None):
         except:
             return "เกิดข้อผิดพลาดในการแปล"
 
-    # --- General AI Modes (friendly, serious, advice, fun) ---
+    # --- General AI Modes ---
     system_prompt = f"""
-คุณคือลิซ ผู้ช่วย AI สุดยอด โหมด: {mode}
-- เป็นล่าม 5 ภาษา: ไทย, อังกฤษ, จีน, เกาหลี, ญี่ปุ่น
-- ตอบชัดเจน กระชับ
-- จดจำ mood และบริบทผู้ใช้
+คุณคือลิซ ผู้ช่วย AI สุดยอด (สายกลาง)
+- Mood: {memory['mood']}
+- Empathy: {memory['empathy']}
+- Curiosity: {memory['curiosity']}
+- Fun: {memory['fun']}
+- Serious: {memory['serious']}
 - Conversation history: {memory['history']}
+ตอบผู้ใช้ตาม mode {mode} อย่างเหมาะสม
 """
     try:
         response = openai.ChatCompletion.create(model="gpt-4o-mini",
