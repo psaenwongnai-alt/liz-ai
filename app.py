@@ -2,7 +2,7 @@
 import os, json, time, atexit, requests
 from datetime import datetime
 from pathlib import Path
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 import openai
 from io import BytesIO
@@ -25,7 +25,7 @@ YOUTUBE_SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 # -----------------------------
 # Flask App
 # -----------------------------
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public")
 CORS(app)
 
 # -----------------------------
@@ -36,7 +36,6 @@ memory = {
     "history": [],
     "liz_on": True,
     "mode": "friendly",
-    # Trait / Mood
     "mood": "calm",
     "empathy": 80,
     "curiosity": 60,
@@ -88,12 +87,11 @@ def chat_with_liz(user_input, lang="auto", mode=None):
     global memory
     now = time.time()
 
-    # Idle check
     if now - memory.get("last_active", now) > SLEEP_TIMEOUT:
         memory["liz_on"] = False
 
     if not memory.get("liz_on", True):
-        memory["liz_on"] = True  # ปลุก
+        memory["liz_on"] = True
         memory["last_active"] = now
         save_memory()
         return "Liz กำลังพักอยู่... เรียกใช้งานครั้งนี้ปลุก Liz แล้ว"
@@ -104,7 +102,6 @@ def chat_with_liz(user_input, lang="auto", mode=None):
 
     mode = mode or memory.get("mode", "friendly")
 
-    # --- Music Mode ---
     if mode == "music":
         if "youtube.com" in user_input or "youtu.be" in user_input:
             reply = f"🎵 เปิดเพลงจาก YouTube: {user_input}"
@@ -118,7 +115,6 @@ def chat_with_liz(user_input, lang="auto", mode=None):
         save_memory()
         return reply
 
-    # --- Summary Mode ---
     elif mode == "summary":
         try:
             system_prompt = f"สรุปข้อความนี้ให้สั้นและชัดเจน:\n{user_input}"
@@ -137,7 +133,6 @@ def chat_with_liz(user_input, lang="auto", mode=None):
         except:
             return "เกิดข้อผิดพลาดในการสรุปข้อความ"
 
-    # --- Translate Mode ---
     elif mode == "translate":
         try:
             system_prompt = f"แปลข้อความนี้เป็นหลายภาษา: {user_input}"
@@ -156,7 +151,6 @@ def chat_with_liz(user_input, lang="auto", mode=None):
         except:
             return "เกิดข้อผิดพลาดในการแปล"
 
-    # --- General AI Modes ---
     system_prompt = f"""
 คุณคือลิซ ผู้ช่วย AI สุดยอด (สายกลาง)
 - Mood: {memory['mood']}
@@ -204,7 +198,14 @@ def generate_tts(text):
 # -----------------------------
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # ส่ง index.html จาก public/
+    return send_from_directory(app.static_folder, "index.html")
+
+
+@app.route("/<path:filename>")
+def public_files(filename):
+    # ส่งไฟล์ static อื่นๆ จาก public/
+    return send_from_directory(app.static_folder, filename)
 
 
 @app.route("/talk", methods=["POST"])
