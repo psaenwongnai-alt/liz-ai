@@ -17,7 +17,7 @@ FIREBASE_PROJECT = "liz-ai-project"
 LOG_FILE = "deploy_history.log"
 CRITICAL_FILES = [
     "app.py", "requirements.txt", "public/index.html", "public/style.css",
-    "public/script.js", "public/icon.png", "public/ting.mp3"
+    "public/hub5.js", "public/icon.png", "public/ting.mp3"
 ]
 CRITICAL_SECRETS = [".env"]
 APP_PROCESS = None
