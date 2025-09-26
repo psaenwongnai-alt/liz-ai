@@ -26,6 +26,23 @@
       <audio id="ttsAudio"></audio>
       <audio id="ting" src="/static/ting.mp3" preload="auto"></audio>
     </div>
-    <script src="/static/script.js" defer></script>
+
+    <!-- ตรวจสอบ script path ถูกต้องและรันหลัง DOM โหลด -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("hudCanvas");
+        if (!canvas) {
+          console.error("Canvas not found!");
+          return;
+        }
+        const ctx = canvas.getContext("2d");
+        console.log("Canvas loaded successfully", ctx);
+        // ใส่ script.js หลังตรวจสอบ canvas
+        const script = document.createElement("script");
+        script.src = "/static/script.js";
+        script.defer = true;
+        document.body.appendChild(script);
+      });
+    </script>
   </body>
 </html>
