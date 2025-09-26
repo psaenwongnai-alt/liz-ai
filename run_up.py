@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, subprocess, shutil, time, atexit, hashlib, sys
+import os, subprocess, shutil, time, atexit, hashlib, sys, threading
 from pathlib import Path
 from datetime import datetime
 from watchdog.observers import Observer
@@ -22,6 +22,9 @@ CRITICAL_FILES = [
 CRITICAL_SECRETS = [".env"]
 APP_PROCESS = None
 PORT = int(os.environ.get("PORT", "3000"))
+SERVER_URL = f"http://localhost:{PORT}"  # เปลี่ยนถ้าต้องใช้ URL จริง
+
+STATUS = "IDLE"  # สถานะสำหรับ HUD animation
 
 
 # --------------------------
@@ -35,7 +38,23 @@ def log(msg):
 
 
 # --------------------------
-# Helper
+# Terminal HUD animation
+# --------------------------
+HUD_FRAMES = ["[   ]", "[=  ]", "[== ]", "[===]", "[ ==]", "[  =]"]
+
+
+def hud_animation():
+    idx = 0
+    while True:
+        frame = HUD_FRAMES[idx % len(HUD_FRAMES)]
+        sys.stdout.write(f"\r💻 Liz AI Status: {STATUS} {frame}")
+        sys.stdout.flush()
+        idx += 1
+        time.sleep(0.2)
+
+
+# --------------------------
+# Helper & file checks
 # --------------------------
 def run(cmd, silent=False):
     try:
@@ -63,9 +82,6 @@ def file_hash(path):
     return h.hexdigest()
 
 
-# --------------------------
-# Kill existing process on PORT
-# --------------------------
 def kill_port(port=PORT):
     try:
         pids = subprocess.getoutput(f"lsof -ti:{port}").splitlines()
@@ -76,9 +92,6 @@ def kill_port(port=PORT):
         log(f"⚠️ Error killing port {port}: {e}")
 
 
-# --------------------------
-# Check files/secrets
-# --------------------------
 def check_files():
     missing = [f for f in CRITICAL_FILES if not Path(f).exists()]
     if missing:
@@ -95,9 +108,6 @@ def check_secrets():
         log("✅ All secrets exist.")
 
 
-# --------------------------
-# Use current Python
-# --------------------------
 def ensure_python():
     python_path = Path(sys.executable)
     log(f"🔹 Using Python at {python_path}")
@@ -108,7 +118,7 @@ def ensure_python():
 # Run Gunicorn
 # --------------------------
 def run_app(python_path):
-    global APP_PROCESS
+    global APP_PROCESS, STATUS
     kill_port(PORT)
     if APP_PROCESS and APP_PROCESS.poll() is None:
         log(f"🔹 Gunicorn already running (PID {APP_PROCESS.pid})")
@@ -116,25 +126,31 @@ def run_app(python_path):
     if not Path("app.py").exists():
         log("❌ app.py not found, cannot start Gunicorn")
         return
+    STATUS = "STARTING"
     APP_PROCESS = subprocess.Popen([
         str(python_path), "-m", "gunicorn", "--workers", "4", "--bind",
         f"0.0.0.0:{PORT}", "app:app"
     ])
+    time.sleep(1)  # ให้ HUD แสดง STARTING
+    STATUS = "ONLINE"
     log(f"✅ Server started on port {PORT} (PID {APP_PROCESS.pid})")
+    log(f"🌐 Access Liz AI at: {SERVER_URL}")
 
 
 def cleanup():
-    global APP_PROCESS
+    global APP_PROCESS, STATUS
+    STATUS = "SHUTTING DOWN"
     if APP_PROCESS:
         log("⏹️ Terminating Gunicorn...")
         APP_PROCESS.terminate()
+    STATUS = "OFFLINE"
 
 
 atexit.register(cleanup)
 
 
 # --------------------------
-# Git push excluding secrets
+# Git & Deploy
 # --------------------------
 def git_commit_push():
     secrets_paths = [str(s)
@@ -156,9 +172,6 @@ def git_commit_push():
         log("⚠️ GITHUB_TOKEN missing, skipping Git push")
 
 
-# --------------------------
-# Deploy
-# --------------------------
 def deploy_vercel():
     if not VERCEL_TOKEN or shutil.which("vercel") is None:
         log("⚠️ Vercel token missing or CLI not found, skipping deploy")
@@ -191,17 +204,19 @@ FILE_HASHES = {}
 class ChangeHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
-        global FILE_HASHES
+        global FILE_HASHES, STATUS
         for f in CRITICAL_FILES:
             h = file_hash(f)
             if FILE_HASHES.get(f) != h:
                 FILE_HASHES[f] = h
                 log("🔹 Changes detected: committing, deploying, restarting app..."
                     )
+                STATUS = "DEPLOYING"
                 git_commit_push()
                 deploy_vercel()
                 deploy_firebase()
                 run_app(Path(sys.executable))
+                STATUS = "ONLINE"
                 break
 
 
@@ -213,14 +228,40 @@ def watch_files():
 
 
 # --------------------------
-# Main
+# Background listener for stop commands
+# --------------------------
+def listen_stop_commands():
+    global STATUS
+    while True:
+        try:
+            cmd = input().strip()
+            if cmd in ["เลิกงาน", "หยุดทำงาน", "stop", "exit", "quit"]:
+                log("🛑 Stop command received. Shutting down...")
+                STATUS = "SHUTTING DOWN"
+                cleanup()
+                os._exit(0)
+        except EOFError:
+            time.sleep(1)
+
+
+# --------------------------
+# Main loop
 # --------------------------
 def main_loop():
     python_path = ensure_python()
     check_files()
     check_secrets()
     run_app(python_path)
+
+    # Start HUD animation thread
+    threading.Thread(target=hud_animation, daemon=True).start()
+
+    # Start watchdog
     observer = watch_files()
+
+    # Start background thread to listen stop commands
+    threading.Thread(target=listen_stop_commands, daemon=True).start()
+
     try:
         while True:
             time.sleep(1)
