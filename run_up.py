@@ -20,9 +20,7 @@ CRITICAL_FILES = [
     "static/script.js", "static/icon.png", "static/ting.mp3"
 ]
 
-CRITICAL_SECRETS = [
-    ".env",
-]
+CRITICAL_SECRETS = [".env"]
 
 VENV_DIR = Path(".venv")
 APP_PROCESS = None
@@ -39,7 +37,7 @@ def log(msg):
 
 
 # --------------------------
-# Helper functions
+# Helper
 # --------------------------
 def run(cmd, **kwargs):
     try:
@@ -63,40 +61,29 @@ def file_hash(path):
 
 
 # --------------------------
-# Restore files & secrets
+# Check critical files
 # --------------------------
-def restore_files():
-    restored = []
-    for f in CRITICAL_FILES:
-        path = Path(f)
-        if not path.exists():
-            if f.startswith("static"):
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.touch()
-            elif f.endswith(".py") or f.endswith(".txt"):
-                path.write_text("# placeholder")
-            elif f.endswith("index.html"):
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_text(
-                    "<!DOCTYPE html><html><head></head><body></body></html>")
-            restored.append(f)
-    if restored:
-        log(f"✅ Restored/created files: {restored}")
+def check_files():
+    missing_files = [f for f in CRITICAL_FILES if not Path(f).exists()]
+    if missing_files:
+        log(f"⚠️ Missing critical files (cannot run app properly): {missing_files}"
+            )
+    else:
+        log("✅ All critical files exist.")
 
 
-def restore_secrets():
-    for s in CRITICAL_SECRETS:
-        path = Path(s)
-        example_path = Path(f"{s}.example")
-        if not path.exists() and example_path.exists():
-            shutil.copy(example_path, path)
-            log(f"✅ Restored secret: {s}")
+def check_secrets():
+    missing_secrets = [s for s in CRITICAL_SECRETS if not Path(s).exists()]
+    if missing_secrets:
+        log(f"⚠️ Missing secrets (app may fail): {missing_secrets}")
+    else:
+        log("✅ All secrets exist.")
 
 
 # --------------------------
 # Firebase config
 # --------------------------
-def restore_firebase_config():
+def ensure_firebase():
     firebase_json = Path("firebase.json")
     public_dir = Path("public")
     index_html = public_dir / "index.html"
@@ -194,7 +181,7 @@ def deploy_vercel():
 
 
 def deploy_firebase():
-    restore_firebase_config()
+    ensure_firebase()
     if not SERVICE_ACCOUNT_PATH.exists() or shutil.which("firebase") is None:
         log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy"
             )
@@ -209,7 +196,7 @@ def deploy_firebase():
 
 
 # --------------------------
-# Watch for changes (real-time)
+# Watch for changes
 # --------------------------
 try:
     from watchdog.observers import Observer
@@ -234,6 +221,8 @@ class ChangeHandler(FileSystemEventHandler):
                 git_commit_push()
                 deploy_vercel()
                 deploy_firebase()
+                run_app(VENV_DIR / ("Scripts" if os.name == "nt" else "bin") /
+                        "python")
                 break
 
 
@@ -249,9 +238,9 @@ def watch_files():
 # --------------------------
 def main_loop():
     python_path = ensure_venv()
-    restore_files()
-    restore_secrets()
-    restore_firebase_config()
+    check_files()
+    check_secrets()
+    ensure_firebase()
     run_app(python_path)
 
     observer = watch_files()
