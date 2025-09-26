@@ -14,8 +14,8 @@ SESSION_FILE = Path("liz_memory.json")
 SLEEP_TIMEOUT = 15 * 60  # 15 นาที idle
 LANGUAGES = ["th", "en", "zh", "ko", "ja"]
 MODES = [
-    "friendly", "serious", "advice", "fun", "music", "translate",
-    "tts", "summary"
+    "friendly", "serious", "advice", "fun", "music", "translate", "tts",
+    "summary"
 ]
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -39,15 +39,19 @@ memory = {
     "mode": "friendly"
 }
 
+
 def save_memory():
     SESSION_FILE.write_text(json.dumps(memory, ensure_ascii=False))
+
 
 def load_memory():
     global memory
     if SESSION_FILE.exists():
         memory = json.loads(SESSION_FILE.read_text())
 
+
 load_memory()
+
 
 # -----------------------------
 # YouTube Helper
@@ -70,6 +74,7 @@ def search_youtube(query):
     except Exception as e:
         print("YouTube search error:", e)
     return None, None
+
 
 # -----------------------------
 # AI Chat
@@ -115,11 +120,14 @@ def chat_with_liz(user_input, lang="auto", mode=None):
     elif mode == "summary":
         try:
             system_prompt = f"สรุปข้อความนี้ให้สั้นและชัดเจน:\n{user_input}"
-            response = openai.ChatCompletion.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "system", "content": system_prompt}],
-                max_tokens=150
-            )
+            response = openai.ChatCompletion.create(model="gpt-4o-mini",
+                                                    messages=[{
+                                                        "role":
+                                                        "system",
+                                                        "content":
+                                                        system_prompt
+                                                    }],
+                                                    max_tokens=150)
             reply = response.choices[0].message.content.strip()
             memory["history"].append({"role": "liz", "content": reply})
             save_memory()
@@ -131,11 +139,14 @@ def chat_with_liz(user_input, lang="auto", mode=None):
     elif mode == "translate":
         try:
             system_prompt = f"แปลข้อความนี้เป็นหลายภาษา: {user_input}"
-            response = openai.ChatCompletion.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "system", "content": system_prompt}],
-                max_tokens=200
-            )
+            response = openai.ChatCompletion.create(model="gpt-4o-mini",
+                                                    messages=[{
+                                                        "role":
+                                                        "system",
+                                                        "content":
+                                                        system_prompt
+                                                    }],
+                                                    max_tokens=200)
             reply = response.choices[0].message.content.strip()
             memory["history"].append({"role": "liz", "content": reply})
             save_memory()
@@ -152,11 +163,14 @@ def chat_with_liz(user_input, lang="auto", mode=None):
 - Conversation history: {memory['history']}
 """
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "system", "content": system_prompt}],
-            max_tokens=250
-        )
+        response = openai.ChatCompletion.create(model="gpt-4o-mini",
+                                                messages=[{
+                                                    "role":
+                                                    "system",
+                                                    "content":
+                                                    system_prompt
+                                                }],
+                                                max_tokens=250)
         reply = response.choices[0].message.content.strip()
         memory["history"].append({"role": "liz", "content": reply})
         save_memory()
@@ -164,21 +178,21 @@ def chat_with_liz(user_input, lang="auto", mode=None):
     except Exception as e:
         return f"AI error: {e}"
 
+
 # -----------------------------
 # TTS
 # -----------------------------
 def generate_tts(text):
     try:
-        audio_resp = openai.audio.speech.create(
-            model="gpt-4o-mini-tts",
-            voice="alloy",
-            input=text
-        )
+        audio_resp = openai.audio.speech.create(model="gpt-4o-mini-tts",
+                                                voice="alloy",
+                                                input=text)
         audio_bytes = BytesIO(audio_resp.read())
         return audio_bytes
     except Exception as e:
         print("TTS error:", e)
         return None
+
 
 # -----------------------------
 # Routes
@@ -186,6 +200,7 @@ def generate_tts(text):
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/talk", methods=["POST"])
 def talk():
@@ -196,11 +211,13 @@ def talk():
     reply = chat_with_liz(text, lang, mode)
     return jsonify({"response": reply})
 
+
 @app.route("/sleep", methods=["POST"])
 def sleep_route():
     memory["liz_on"] = False
     save_memory()
     return jsonify({"status": "sleep"})
+
 
 @app.route("/tts", methods=["POST"])
 def tts():
@@ -213,6 +230,7 @@ def tts():
     else:
         return jsonify({"error": "TTS failed"}), 500
 
+
 @app.route("/set_mode", methods=["POST"])
 def set_mode():
     data = request.json
@@ -224,11 +242,13 @@ def set_mode():
     else:
         return jsonify({"error": "invalid mode"}), 400
 
+
 # -----------------------------
 # Cleanup
 # -----------------------------
 def cleanup():
     save_memory()
+
 
 atexit.register(cleanup)
 
