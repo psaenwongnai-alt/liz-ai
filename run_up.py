@@ -16,11 +16,12 @@ FIREBASE_PROJECT = "liz-ai-project"
 
 LOG_FILE = "deploy_history.log"
 CRITICAL_FILES = [
-    "app.py", "requirements.txt", "templates/index.html", "static/style.css",
-    "static/script.js", "static/icon.png", "static/ting.mp3"
+    "app.py", "requirements.txt", "public/index.html", "public/style.css",
+    "public/script.js", "public/icon.png", "public/ting.mp3"
 ]
 CRITICAL_SECRETS = [".env"]
 APP_PROCESS = None
+PORT = int(os.environ.get("PORT", "3000"))
 
 
 # --------------------------
@@ -63,6 +64,19 @@ def file_hash(path):
 
 
 # --------------------------
+# Kill existing process on PORT
+# --------------------------
+def kill_port(port=PORT):
+    try:
+        pids = subprocess.getoutput(f"lsof -ti:{port}").splitlines()
+        for pid in pids:
+            subprocess.run(["kill", "-9", pid])
+            log(f"⏹️ Killed process {pid} on port {port}")
+    except Exception as e:
+        log(f"⚠️ Error killing port {port}: {e}")
+
+
+# --------------------------
 # Check files/secrets
 # --------------------------
 def check_files():
@@ -91,34 +105,29 @@ def ensure_python():
 
 
 # --------------------------
-# Run/Restart Gunicorn
+# Run Gunicorn
 # --------------------------
 def run_app(python_path):
     global APP_PROCESS
-    # Kill old process
+    kill_port(PORT)
     if APP_PROCESS and APP_PROCESS.poll() is None:
-        log(f"⏹️ Terminating old Gunicorn (PID {APP_PROCESS.pid})")
-        APP_PROCESS.terminate()
-        APP_PROCESS.wait()
+        log(f"🔹 Gunicorn already running (PID {APP_PROCESS.pid})")
+        return
     if not Path("app.py").exists():
         log("❌ app.py not found, cannot start Gunicorn")
         return
-    port = os.environ.get("PORT", "3000")
     APP_PROCESS = subprocess.Popen([
         str(python_path), "-m", "gunicorn", "--workers", "4", "--bind",
-        f"0.0.0.0:{port}", "app:app"
-    ],
-                                   stdout=subprocess.DEVNULL,
-                                   stderr=subprocess.DEVNULL)
-    log(f"✅ Gunicorn started on port {port} (PID {APP_PROCESS.pid})")
+        f"0.0.0.0:{PORT}", "app:app"
+    ])
+    log(f"✅ Server started on port {PORT} (PID {APP_PROCESS.pid})")
 
 
 def cleanup():
     global APP_PROCESS
-    if APP_PROCESS and APP_PROCESS.poll() is None:
+    if APP_PROCESS:
         log("⏹️ Terminating Gunicorn...")
         APP_PROCESS.terminate()
-        APP_PROCESS.wait()
 
 
 atexit.register(cleanup)
