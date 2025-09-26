@@ -22,10 +22,11 @@ CRITICAL_FILES = [
 CRITICAL_SECRETS = [".env"]
 APP_PROCESS = None
 PORT = int(os.environ.get("PORT", "3000"))
-SERVER_URL = f"http://localhost:{PORT}"
+LOCAL_URL = f"http://localhost:{PORT}"
+VERCEL_URL = None
+FIREBASE_URL = f"https://{FIREBASE_PROJECT}.web.app"
 
 STATUS = "IDLE"  # HUD status
-
 
 # --------------------------
 # Logging
@@ -36,22 +37,20 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(f"[{timestamp}] {msg}\n")
 
-
 # --------------------------
 # HUD animation
 # --------------------------
 HUD_FRAMES = ["[   ]", "[=  ]", "[== ]", "[===]", "[ ==]", "[  =]"]
 
-
 def hud_animation():
     idx = 0
     while True:
         frame = HUD_FRAMES[idx % len(HUD_FRAMES)]
-        sys.stdout.write(f"\r💻 Liz AI Status: {STATUS} {frame}")
+        urls = f"Local: {LOCAL_URL} | Firebase: {FIREBASE_URL} | Vercel: {VERCEL_URL or '...' }"
+        sys.stdout.write(f"\r💻 Liz AI Status: {STATUS} {frame} | {urls}        ")
         sys.stdout.flush()
         idx += 1
         time.sleep(0.2)
-
 
 # --------------------------
 # Helper functions
@@ -59,15 +58,11 @@ def hud_animation():
 def run(cmd, silent=False):
     try:
         if silent:
-            subprocess.run(cmd,
-                           check=True,
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
+            subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
             subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         log(f"❌ Command failed: {cmd} -> {e}")
-
 
 def file_hash(path):
     path = Path(path)
@@ -81,7 +76,6 @@ def file_hash(path):
                 h.update(f.read_bytes())
     return h.hexdigest()
 
-
 def kill_port(port=PORT):
     try:
         pids = subprocess.getoutput(f"lsof -ti:{port}").splitlines()
@@ -91,14 +85,12 @@ def kill_port(port=PORT):
     except Exception as e:
         log(f"⚠️ Error killing port {port}: {e}")
 
-
 def check_files():
     missing = [f for f in CRITICAL_FILES if not Path(f).exists()]
     if missing:
         log(f"⚠️ Missing critical files: {missing}")
     else:
         log("✅ All critical files exist.")
-
 
 def check_secrets():
     missing = [s for s in CRITICAL_SECRETS if not Path(s).exists()]
@@ -107,12 +99,10 @@ def check_secrets():
     else:
         log("✅ All secrets exist.")
 
-
 def ensure_python():
     python_path = Path(sys.executable)
     log(f"🔹 Using Python at {python_path}")
     return python_path
-
 
 # --------------------------
 # Run Gunicorn
@@ -134,8 +124,6 @@ def run_app(python_path):
     time.sleep(1)
     STATUS = "ONLINE"
     log(f"✅ Server started on port {PORT} (PID {APP_PROCESS.pid})")
-    log(f"🌐 Access Liz AI at: {SERVER_URL}")
-
 
 # --------------------------
 # Cleanup
@@ -148,76 +136,70 @@ def cleanup():
         APP_PROCESS.terminate()
     STATUS = "OFFLINE"
 
-
 atexit.register(cleanup)
-
 
 # --------------------------
 # Git & Deploy
 # --------------------------
 def git_commit_push():
-    secrets_paths = [str(s)
-                     for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
+    secrets_paths = [str(s) for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
     all_files = subprocess.getoutput("git ls-files").splitlines()
     files_to_add = [f for f in all_files if f not in secrets_paths]
     if files_to_add:
         run(["git", "add"] + files_to_add, silent=True)
-    run(["git", "commit", "-m", "Auto deploy commit", "--allow-empty"],
-        silent=True)
+    run(["git", "commit", "-m", "Auto deploy commit", "--allow-empty"], silent=True)
     if GITHUB_TOKEN:
         run([
             "git", "push", "--set-upstream",
             f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
-        ],
-            silent=True)
+        ], silent=True)
         log("✅ Git push done (secrets excluded)")
     else:
         log("⚠️ GITHUB_TOKEN missing, skipping Git push")
 
-
 def deploy_vercel():
+    global VERCEL_URL
     if not VERCEL_TOKEN or shutil.which("vercel") is None:
         log("⚠️ Vercel token missing or CLI not found, skipping deploy")
         return
+    STATUS = "DEPLOYING"
     run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN], silent=True)
-    vercel_url = subprocess.getoutput("vercel --prod --token " + VERCEL_TOKEN +
-                                      " --confirm | grep -o 'https://.*'")
-    log(f"✅ Deployed to Vercel at: {vercel_url if vercel_url else 'URL unknown'}"
-        )
-
+    # ดึง URL ล่าสุดจาก Vercel CLI
+    try:
+        url = subprocess.getoutput(f"vercel --prod --token {VERCEL_TOKEN} --confirm | grep -o 'https://.*'").strip()
+        VERCEL_URL = url if url else VERCEL_URL
+    except:
+        pass
+    log(f"✅ Deployed to Vercel at: {VERCEL_URL or 'URL unknown'}")
+    STATUS = "ONLINE"
 
 def deploy_firebase():
+    global FIREBASE_URL
     if not SERVICE_ACCOUNT_PATH.exists() or shutil.which("firebase") is None:
-        log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy"
-            )
+        log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy")
         return
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(
-        SERVICE_ACCOUNT_PATH.resolve())
+    STATUS = "DEPLOYING"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(SERVICE_ACCOUNT_PATH.resolve())
     run([
-        "firebase", "deploy", "--only", "hosting", "--project",
-        FIREBASE_PROJECT
-    ],
-        silent=True)
-    firebase_url = f"https://{FIREBASE_PROJECT}.web.app"
-    log(f"✅ Deployed to Firebase at: {firebase_url}")
-
+        "firebase", "deploy", "--only", "hosting", "--project", FIREBASE_PROJECT
+    ], silent=True)
+    FIREBASE_URL = f"https://{FIREBASE_PROJECT}.web.app"
+    log(f"✅ Deployed to Firebase at: {FIREBASE_URL}")
+    STATUS = "ONLINE"
 
 # --------------------------
 # Watchdog
 # --------------------------
 FILE_HASHES = {}
 
-
 class ChangeHandler(FileSystemEventHandler):
-
     def on_modified(self, event):
         global FILE_HASHES, STATUS
         for f in CRITICAL_FILES:
             h = file_hash(f)
             if FILE_HASHES.get(f) != h:
                 FILE_HASHES[f] = h
-                log("🔹 Changes detected: committing, deploying, restarting app..."
-                    )
+                log("🔹 Changes detected: committing, deploying, restarting app...")
                 STATUS = "DEPLOYING"
                 git_commit_push()
                 deploy_vercel()
@@ -226,16 +208,14 @@ class ChangeHandler(FileSystemEventHandler):
                 STATUS = "ONLINE"
                 break
 
-
 def watch_files():
     observer = Observer()
     observer.schedule(ChangeHandler(), ".", recursive=True)
     observer.start()
     return observer
 
-
 # --------------------------
-# Background listener for stop commands
+# Stop command listener
 # --------------------------
 def listen_stop_commands():
     global STATUS
@@ -249,7 +229,6 @@ def listen_stop_commands():
                 os._exit(0)
         except EOFError:
             time.sleep(1)
-
 
 # --------------------------
 # Main loop
@@ -271,7 +250,6 @@ def main_loop():
         observer.stop()
     observer.join()
     cleanup()
-
 
 if __name__ == "__main__":
     main_loop()
