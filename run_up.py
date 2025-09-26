@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-import os, subprocess, shutil, time, venv, atexit, hashlib
+import os, subprocess, shutil, time, atexit, hashlib
 from pathlib import Path
 from datetime import datetime
-from threading import Thread
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # --------------------------
 # Config
@@ -14,15 +15,11 @@ SERVICE_ACCOUNT_PATH = Path("secrets/firebase-service-account.json")
 FIREBASE_PROJECT = "liz-ai-project"
 
 LOG_FILE = "deploy_history.log"
-
 CRITICAL_FILES = [
     "app.py", "requirements.txt", "templates/index.html", "static/style.css",
     "static/script.js", "static/icon.png", "static/ting.mp3"
 ]
-
 CRITICAL_SECRETS = [".env"]
-
-VENV_DIR = Path(".venv")
 APP_PROCESS = None
 
 
@@ -39,12 +36,14 @@ def log(msg):
 # --------------------------
 # Helper
 # --------------------------
-def run(cmd, **kwargs):
+def run(cmd):
     try:
-        return subprocess.run(cmd, shell=False, check=True, **kwargs)
+        subprocess.run(cmd,
+                       check=True,
+                       stdout=subprocess.DEVNULL,
+                       stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
-        log(f"❌ Command failed: {cmd} -> {e}")
-        return None
+        log(f"❌ Command failed: {cmd} -> {e.stderr.decode().strip()}")
 
 
 def file_hash(path):
@@ -61,89 +60,54 @@ def file_hash(path):
 
 
 # --------------------------
-# Check critical files
+# Check files/secrets
 # --------------------------
 def check_files():
-    missing_files = [f for f in CRITICAL_FILES if not Path(f).exists()]
-    if missing_files:
-        log(f"⚠️ Missing critical files (cannot run app properly): {missing_files}"
-            )
+    missing = [f for f in CRITICAL_FILES if not Path(f).exists()]
+    if missing:
+        log(f"⚠️ Missing critical files: {missing}")
     else:
         log("✅ All critical files exist.")
 
 
 def check_secrets():
-    missing_secrets = [s for s in CRITICAL_SECRETS if not Path(s).exists()]
-    if missing_secrets:
-        log(f"⚠️ Missing secrets (app may fail): {missing_secrets}")
+    missing = [s for s in CRITICAL_SECRETS if not Path(s).exists()]
+    if missing:
+        log(f"⚠️ Missing secrets: {missing}")
     else:
         log("✅ All secrets exist.")
 
 
 # --------------------------
-# Firebase config
+# Gunicorn
 # --------------------------
-def ensure_firebase():
-    firebase_json = Path("firebase.json")
-    public_dir = Path("public")
-    index_html = public_dir / "index.html"
-
-    if not firebase_json.exists():
-        firebase_json.write_text("""{
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [ { "source": "**", "destination": "/index.html" } ]
-  }
-}""")
-        log("✅ Created default firebase.json")
-
-    if not public_dir.exists():
-        public_dir.mkdir(parents=True)
-        log("✅ Created public/ folder")
-
-    if not index_html.exists():
-        index_html.write_text(
-            "<!DOCTYPE html><html><head></head><body></body></html>")
-        log("✅ Created public/index.html")
-
-
-# --------------------------
-# Virtualenv
-# --------------------------
-def ensure_venv():
-    if not VENV_DIR.exists():
-        log("🔹 Creating virtual environment...")
-        venv.create(VENV_DIR, with_pip=True)
-    pip_path = VENV_DIR / ("Scripts" if os.name == "nt" else "bin") / "pip"
-    python_path = VENV_DIR / ("Scripts"
-                              if os.name == "nt" else "bin") / "python"
-    if Path("requirements.txt").exists():
-        log("🔹 Installing dependencies in virtualenv...")
-        run([str(pip_path), "install", "-r", "requirements.txt"])
-    return python_path
-
-
-# --------------------------
-# App process
-# --------------------------
-def run_app(python_path):
+def run_app():
     global APP_PROCESS
     if APP_PROCESS and APP_PROCESS.poll() is None:
+        log(f"🔹 Gunicorn already running (PID {APP_PROCESS.pid})")
         return
-    if Path("app.py").exists():
-        APP_PROCESS = subprocess.Popen([str(python_path), "app.py"])
-        log(f"✅ app.py started with PID {APP_PROCESS.pid}")
+
+    gunicorn_bin = shutil.which("gunicorn")
+    if not gunicorn_bin:
+        log("❌ Gunicorn binary not found! Install via Replit Packages.")
+        return
+    if not Path("app.py").exists():
+        log("❌ app.py not found, cannot start Gunicorn")
+        return
+
+    port = os.environ.get("PORT", "3000")
+    APP_PROCESS = subprocess.Popen([
+        gunicorn_bin, "--workers", "4", "--bind", f"0.0.0.0:{port}", "app:app"
+    ],
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.PIPE)
+    log(f"✅ Gunicorn started on port {port} (PID {APP_PROCESS.pid})")
 
 
 def cleanup():
     global APP_PROCESS
     if APP_PROCESS:
-        log("⏹️ Terminating app.py...")
+        log("⏹️ Terminating Gunicorn...")
         APP_PROCESS.terminate()
 
 
@@ -158,15 +122,17 @@ def git_commit_push():
                      for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
     all_files = subprocess.getoutput("git ls-files").splitlines()
     files_to_add = [f for f in all_files if f not in secrets_paths]
-
     if files_to_add:
         run(["git", "add"] + files_to_add)
     run(["git", "commit", "-m", "Auto deploy commit", "--allow-empty"])
-    run([
-        "git", "push", "--set-upstream",
-        f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
-    ])
-    log("✅ Git push done (secrets excluded)")
+    if GITHUB_TOKEN:
+        run([
+            "git", "push", "--set-upstream",
+            f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
+        ])
+        log("✅ Git push done (secrets excluded)")
+    else:
+        log("⚠️ GITHUB_TOKEN missing, skipping Git push")
 
 
 # --------------------------
@@ -181,7 +147,6 @@ def deploy_vercel():
 
 
 def deploy_firebase():
-    ensure_firebase()
     if not SERVICE_ACCOUNT_PATH.exists() or shutil.which("firebase") is None:
         log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy"
             )
@@ -196,16 +161,8 @@ def deploy_firebase():
 
 
 # --------------------------
-# Watch for changes
+# Watchdog
 # --------------------------
-try:
-    from watchdog.observers import Observer
-    from watchdog.events import FileSystemEventHandler
-except ImportError:
-    subprocess.run([str(Path(".venv/bin/pip")), "install", "watchdog"])
-    from watchdog.observers import Observer
-    from watchdog.events import FileSystemEventHandler
-
 FILE_HASHES = {}
 
 
@@ -217,12 +174,12 @@ class ChangeHandler(FileSystemEventHandler):
             h = file_hash(f)
             if FILE_HASHES.get(f) != h:
                 FILE_HASHES[f] = h
-                log("🔹 Changes detected, committing and deploying...")
+                log("🔹 Changes detected: committing, deploying, restarting app..."
+                    )
                 git_commit_push()
                 deploy_vercel()
                 deploy_firebase()
-                run_app(VENV_DIR / ("Scripts" if os.name == "nt" else "bin") /
-                        "python")
+                run_app()
                 break
 
 
@@ -234,15 +191,12 @@ def watch_files():
 
 
 # --------------------------
-# Main loop
+# Main
 # --------------------------
 def main_loop():
-    python_path = ensure_venv()
     check_files()
     check_secrets()
-    ensure_firebase()
-    run_app(python_path)
-
+    run_app()
     observer = watch_files()
     try:
         while True:
