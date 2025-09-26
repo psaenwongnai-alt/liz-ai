@@ -189,7 +189,7 @@ def chat_with_liz(user_input, lang="auto", mode=None):
 # -----------------------------
 def generate_tts(text):
     try:
-        audio_resp = openai.audio.speech.create(model="gpt-4o-mini-tts",
+        audio_resp = openai.audio.speech.create(model="tts-1",
                                                 voice="alloy",
                                                 input=text)
         audio_bytes = BytesIO(audio_resp.read())
