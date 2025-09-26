@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, subprocess, shutil, time, atexit, hashlib
+import os, subprocess, shutil, time, venv, atexit, hashlib
 from pathlib import Path
 from datetime import datetime
 from watchdog.observers import Observer
@@ -20,8 +20,8 @@ CRITICAL_FILES = [
     "static/script.js", "static/icon.png", "static/ting.mp3"
 ]
 CRITICAL_SECRETS = [".env"]
+VENV_DIR = Path(".venv")
 APP_PROCESS = None
-
 
 # --------------------------
 # Logging
@@ -32,19 +32,17 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(f"[{timestamp}] {msg}\n")
 
-
 # --------------------------
 # Helper
 # --------------------------
-def run(cmd):
+def run(cmd, silent=False):
     try:
-        subprocess.run(cmd,
-                       check=True,
-                       stdout=subprocess.DEVNULL,
-                       stderr=subprocess.PIPE)
+        if silent:
+            subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
-        log(f"❌ Command failed: {cmd} -> {e.stderr.decode().strip()}")
-
+        log(f"❌ Command failed: {cmd} -> {e}")
 
 def file_hash(path):
     path = Path(path)
@@ -58,7 +56,6 @@ def file_hash(path):
                 h.update(f.read_bytes())
     return h.hexdigest()
 
-
 # --------------------------
 # Check files/secrets
 # --------------------------
@@ -69,7 +66,6 @@ def check_files():
     else:
         log("✅ All critical files exist.")
 
-
 def check_secrets():
     missing = [s for s in CRITICAL_SECRETS if not Path(s).exists()]
     if missing:
@@ -77,32 +73,30 @@ def check_secrets():
     else:
         log("✅ All secrets exist.")
 
+# --------------------------
+# Virtualenv + install
+# --------------------------
+def ensure_venv():
+    python_path = Path("/usr/bin/python3")  # ใช้ Python ของ Replit
+    log("🔹 Using system Python (Replit) due to Nix limitations")
+    return python_path
 
 # --------------------------
-# Gunicorn
+# Run Gunicorn
 # --------------------------
-def run_app():
+def run_app(python_path):
     global APP_PROCESS
     if APP_PROCESS and APP_PROCESS.poll() is None:
         log(f"🔹 Gunicorn already running (PID {APP_PROCESS.pid})")
         return
-
-    gunicorn_bin = shutil.which("gunicorn")
-    if not gunicorn_bin:
-        log("❌ Gunicorn binary not found! Install via Replit Packages.")
-        return
     if not Path("app.py").exists():
         log("❌ app.py not found, cannot start Gunicorn")
         return
-
     port = os.environ.get("PORT", "3000")
     APP_PROCESS = subprocess.Popen([
-        gunicorn_bin, "--workers", "4", "--bind", f"0.0.0.0:{port}", "app:app"
-    ],
-                                   stdout=subprocess.DEVNULL,
-                                   stderr=subprocess.PIPE)
+        str(python_path), "-m", "gunicorn", "--workers", "4", "--bind", f"0.0.0.0:{port}", "app:app"
+    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     log(f"✅ Gunicorn started on port {port} (PID {APP_PROCESS.pid})")
-
 
 def cleanup():
     global APP_PROCESS
@@ -110,30 +104,26 @@ def cleanup():
         log("⏹️ Terminating Gunicorn...")
         APP_PROCESS.terminate()
 
-
 atexit.register(cleanup)
-
 
 # --------------------------
 # Git push excluding secrets
 # --------------------------
 def git_commit_push():
-    secrets_paths = [str(s)
-                     for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
+    secrets_paths = [str(s) for s in CRITICAL_SECRETS] + [str(SERVICE_ACCOUNT_PATH)]
     all_files = subprocess.getoutput("git ls-files").splitlines()
     files_to_add = [f for f in all_files if f not in secrets_paths]
     if files_to_add:
-        run(["git", "add"] + files_to_add)
-    run(["git", "commit", "-m", "Auto deploy commit", "--allow-empty"])
+        run(["git", "add"] + files_to_add, silent=True)
+    run(["git", "commit", "-m", "Auto deploy commit", "--allow-empty"], silent=True)
     if GITHUB_TOKEN:
         run([
             "git", "push", "--set-upstream",
             f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git", "main"
-        ])
+        ], silent=True)
         log("✅ Git push done (secrets excluded)")
     else:
         log("⚠️ GITHUB_TOKEN missing, skipping Git push")
-
 
 # --------------------------
 # Deploy
@@ -142,46 +132,35 @@ def deploy_vercel():
     if not VERCEL_TOKEN or shutil.which("vercel") is None:
         log("⚠️ Vercel token missing or CLI not found, skipping deploy")
         return
-    run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN])
+    run(["vercel", "--prod", "--yes", "--token", VERCEL_TOKEN], silent=True)
     log("✅ Deployed to Vercel")
-
 
 def deploy_firebase():
     if not SERVICE_ACCOUNT_PATH.exists() or shutil.which("firebase") is None:
-        log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy"
-            )
+        log("⚠️ Firebase Service Account or Firebase CLI missing, skipping deploy")
         return
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(
-        SERVICE_ACCOUNT_PATH.resolve())
-    run([
-        "firebase", "deploy", "--only", "hosting", "--project",
-        FIREBASE_PROJECT
-    ])
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(SERVICE_ACCOUNT_PATH.resolve())
+    run(["firebase", "deploy", "--only", "hosting", "--project", FIREBASE_PROJECT], silent=True)
     log("✅ Deployed to Firebase")
-
 
 # --------------------------
 # Watchdog
 # --------------------------
 FILE_HASHES = {}
 
-
 class ChangeHandler(FileSystemEventHandler):
-
     def on_modified(self, event):
         global FILE_HASHES
         for f in CRITICAL_FILES:
             h = file_hash(f)
             if FILE_HASHES.get(f) != h:
                 FILE_HASHES[f] = h
-                log("🔹 Changes detected: committing, deploying, restarting app..."
-                    )
+                log("🔹 Changes detected: committing, deploying, restarting app...")
                 git_commit_push()
                 deploy_vercel()
                 deploy_firebase()
-                run_app()
+                run_app(Path("/usr/bin/python3"))
                 break
-
 
 def watch_files():
     observer = Observer()
@@ -189,14 +168,14 @@ def watch_files():
     observer.start()
     return observer
 
-
 # --------------------------
 # Main
 # --------------------------
 def main_loop():
+    python_path = ensure_venv()
     check_files()
     check_secrets()
-    run_app()
+    run_app(python_path)
     observer = watch_files()
     try:
         while True:
@@ -205,7 +184,6 @@ def main_loop():
         observer.stop()
     observer.join()
     cleanup()
-
 
 if __name__ == "__main__":
     main_loop()
