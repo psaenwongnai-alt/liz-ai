@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liz AI Minimal + Mood</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div id="container">
+      <div id="icon">🤖</div>
+
+      <div id="buttons">
+        <button id="wakeBtn">Wake Liz</button>
+        <button id="sleepBtn">Sleep Liz</button>
+        <button id="talkBtn">Talk</button>
+      </div>
+
+      <div id="popup"></div>
+      <audio
+        id="ting"
+        src="{{ url_for('static', filename='ting.mp3') }}"
+        preload="auto"
+      ></audio>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
