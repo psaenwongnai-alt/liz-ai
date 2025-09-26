@@ -8,3 +8,9 @@ externalPort = 80
 [[ports]]
 localPort = 9005
 externalPort = 3000
+
+[nix]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "espeak-ng", "fontconfig", "freetype", "libjpeg", "libpng", "pkg-config", "portmidi"]
+
+[agent]
+expertMode = true

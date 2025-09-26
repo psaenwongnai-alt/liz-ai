@@ -2,6 +2,7 @@
 import os, subprocess, shutil, time, venv, atexit, hashlib
 from pathlib import Path
 from datetime import datetime
+from threading import Thread
 
 # --------------------------
 # Config
@@ -12,14 +13,11 @@ VERCEL_TOKEN = os.environ.get("VERCEL_TOKEN")
 SERVICE_ACCOUNT_PATH = Path("secrets/firebase-service-account.json")
 FIREBASE_PROJECT = "liz-ai-project"
 
-CHECK_INTERVAL = 30
 LOG_FILE = "deploy_history.log"
 
 CRITICAL_FILES = [
-    "app.py",
-    "requirements.txt",
-    "templates/index.html",
-    "static",
+    "app.py", "requirements.txt", "templates/index.html", "static/style.css",
+    "static/script.js", "static/icon.png", "static/ting.mp3"
 ]
 
 CRITICAL_SECRETS = [
@@ -28,7 +26,6 @@ CRITICAL_SECRETS = [
 
 VENV_DIR = Path(".venv")
 APP_PROCESS = None
-FILE_HASHES = {}
 
 
 # --------------------------
@@ -42,7 +39,7 @@ def log(msg):
 
 
 # --------------------------
-# Helper
+# Helper functions
 # --------------------------
 def run(cmd, **kwargs):
     try:
@@ -73,16 +70,15 @@ def restore_files():
     for f in CRITICAL_FILES:
         path = Path(f)
         if not path.exists():
-            if f == "static":
-                path.mkdir(parents=True, exist_ok=True)
-            elif path.suffix == ".py":
-                path.write_text("# default placeholder\n")
-            elif path.name == "requirements.txt":
-                path.write_text("flask\n")
-            elif path.name.endswith("index.html"):
+            if f.startswith("static"):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.touch()
+            elif f.endswith(".py") or f.endswith(".txt"):
+                path.write_text("# placeholder")
+            elif f.endswith("index.html"):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(
-                    "<!DOCTYPE html>\n<html><head></head><body></body></html>")
+                    "<!DOCTYPE html><html><head></head><body></body></html>")
             restored.append(f)
     if restored:
         log(f"✅ Restored/created files: {restored}")
@@ -125,7 +121,7 @@ def restore_firebase_config():
 
     if not index_html.exists():
         index_html.write_text(
-            "<!DOCTYPE html>\n<html><head></head><body></body></html>")
+            "<!DOCTYPE html><html><head></head><body></body></html>")
         log("✅ Created public/index.html")
 
 
@@ -213,39 +209,59 @@ def deploy_firebase():
 
 
 # --------------------------
-# Main smart loop
+# Watch for changes (real-time)
 # --------------------------
-def main_loop():
-    python_path = ensure_venv()
-    while True:
-        try:
-            restore_files()
-            restore_secrets()
-            run_app(python_path)
+try:
+    from watchdog.observers import Observer
+    from watchdog.events import FileSystemEventHandler
+except ImportError:
+    subprocess.run([str(Path(".venv/bin/pip")), "install", "watchdog"])
+    from watchdog.observers import Observer
+    from watchdog.events import FileSystemEventHandler
 
-            # --------------------------
-            # Check for changes
-            # --------------------------
-            changed = False
-            for f in CRITICAL_FILES:
-                h = file_hash(f)
-                if FILE_HASHES.get(f) != h:
-                    FILE_HASHES[f] = h
-                    changed = True
+FILE_HASHES = {}
 
-            if changed:
+
+class ChangeHandler(FileSystemEventHandler):
+
+    def on_modified(self, event):
+        global FILE_HASHES
+        for f in CRITICAL_FILES:
+            h = file_hash(f)
+            if FILE_HASHES.get(f) != h:
+                FILE_HASHES[f] = h
                 log("🔹 Changes detected, committing and deploying...")
                 git_commit_push()
                 deploy_vercel()
                 deploy_firebase()
-            else:
-                log("⏹️ No changes detected, skipping deploy")
+                break
 
-        except Exception as e:
-            log(f"❌ Unexpected error: {e}")
 
-        log(f"⏳ Sleeping {CHECK_INTERVAL}s...")
-        time.sleep(CHECK_INTERVAL)
+def watch_files():
+    observer = Observer()
+    observer.schedule(ChangeHandler(), ".", recursive=True)
+    observer.start()
+    return observer
+
+
+# --------------------------
+# Main loop
+# --------------------------
+def main_loop():
+    python_path = ensure_venv()
+    restore_files()
+    restore_secrets()
+    restore_firebase_config()
+    run_app(python_path)
+
+    observer = watch_files()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
+    cleanup()
 
 
 if __name__ == "__main__":
