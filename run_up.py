@@ -85,19 +85,21 @@ def check_secrets():
 # Use current Python
 # --------------------------
 def ensure_python():
-    python_path = Path(sys.executable)  # ใช้ Python ที่รัน script นี้
+    python_path = Path(sys.executable)
     log(f"🔹 Using Python at {python_path}")
     return python_path
 
 
 # --------------------------
-# Run Gunicorn
+# Run/Restart Gunicorn
 # --------------------------
 def run_app(python_path):
     global APP_PROCESS
+    # Kill old process
     if APP_PROCESS and APP_PROCESS.poll() is None:
-        log(f"🔹 Gunicorn already running (PID {APP_PROCESS.pid})")
-        return
+        log(f"⏹️ Terminating old Gunicorn (PID {APP_PROCESS.pid})")
+        APP_PROCESS.terminate()
+        APP_PROCESS.wait()
     if not Path("app.py").exists():
         log("❌ app.py not found, cannot start Gunicorn")
         return
@@ -113,9 +115,10 @@ def run_app(python_path):
 
 def cleanup():
     global APP_PROCESS
-    if APP_PROCESS:
+    if APP_PROCESS and APP_PROCESS.poll() is None:
         log("⏹️ Terminating Gunicorn...")
         APP_PROCESS.terminate()
+        APP_PROCESS.wait()
 
 
 atexit.register(cleanup)
