@@ -3,13 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Liz HUD Neon Iron Man</title>
+    <title>Ultimate Liz HUD Neon Iron Man</title>
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
     <div id="container">
       <canvas id="hudCanvas"></canvas>
-      <div id="maskOverlay"></div>
+      <!-- SVG Helmet Outline -->
+      <svg
+        id="helmetSVG"
+        viewBox="0 0 500 600"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <path
+          d="M100,0 L400,0 C450,50 450,550 400,600 L100,600 C50,550 50,50 100,0 Z"
+          fill="rgba(0,0,0,0.5)"
+          stroke="#00ff88"
+          stroke-width="4"
+        />
+      </svg>
       <div id="icon">🤖</div>
       <div id="popup"></div>
       <audio id="ttsAudio"></audio>
