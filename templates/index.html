@@ -1,19 +1,21 @@
 <!doctype html>
 <html lang="th">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Liz AI</title>
-        <link rel="stylesheet" href="/static/css/style.css" />
-    </head>
-    <body>
-        <div id="icon"></div>
-        <div id="output">สวัสดี! เรียก Liz ด้วยเสียงหรือพิมพ์ข้อความ</div>
-        <input type="text" id="input" placeholder="พิมพ์ข้อความ..." />
-        <button id="sendBtn">ส่ง</button>
-        <button id="wakeBtn">Wake Liz</button>
-        <button id="sleepBtn">Sleep Liz</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liz AI</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div id="icon"></div>
+  <div id="output">สวัสดี! เรียก Liz ด้วยเสียงหรือพิมพ์ข้อความ</div>
+  <input type="text" id="input" placeholder="พิมพ์ข้อความ..." />
+  <button id="sendBtn">ส่ง</button>
+  <button id="wakeBtn">Wake Liz</button>
+  <button id="sleepBtn">Sleep Liz</button>
 
-        <script src="/static/js/script.js" defer></script>
-    </body>
+  <audio id="ting" src="/static/ting.mp3" preload="auto"></audio>
+
+  <script src="/static/js/script.js" defer></script>
+</body>
 </html>
