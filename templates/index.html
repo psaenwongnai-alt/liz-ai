@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liz AI Fullscreen</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="icon"></div>
+      <div id="output"></div>
+      <input type="text" id="input" placeholder="พิมพ์ข้อความ..." />
+      <div id="buttons">
+        <button id="sendBtn">ส่ง</button>
+        <button id="wakeBtn">Wake Liz</button>
+        <button id="sleepBtn">Sleep Liz</button>
+      </div>
+      <audio id="ting" src="/static/ting.mp3" preload="auto"></audio>
+    </div>
+    <script src="/static/script.js" defer></script>
+  </body>
+</html>
