@@ -1,0 +1,582 @@
+nohup: ignoring input
+[2025-09-26 07:49:57] 🔹 Using Python at /home/runner/workspace/.pythonlibs/bin/python3
+[2025-09-26 07:49:57] ✅ All critical files exist.
+[2025-09-26 07:49:57] ✅ All secrets exist.
+[2025-09-26 07:49:57] ✅ Gunicorn started on port 3000 (PID 9787)
+[2025-09-26 07:50:39] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:50:40] ✅ Git push done (secrets excluded)
+[2025-09-26 07:55:26] ✅ Deployed to Vercel
+[2025-09-26 07:55:31] ✅ Deployed to Firebase
+[2025-09-26 07:55:31] ✅ Gunicorn started on port 3000 (PID 9973)
+[2025-09-26 07:55:31] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:55:32] ✅ Git push done (secrets excluded)
+[2025-09-26 07:56:03] ✅ Deployed to Vercel
+[2025-09-26 07:56:08] ✅ Deployed to Firebase
+[2025-09-26 07:56:08] ✅ Gunicorn started on port 3000 (PID 10068)
+[2025-09-26 07:56:08] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:56:09] ✅ Git push done (secrets excluded)
+[2025-09-26 07:56:38] ✅ Deployed to Vercel
+[2025-09-26 07:56:43] ✅ Deployed to Firebase
+[2025-09-26 07:56:43] ✅ Gunicorn started on port 3000 (PID 10165)
+[2025-09-26 07:56:43] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:56:44] ✅ Git push done (secrets excluded)
+[2025-09-26 07:57:17] ✅ Deployed to Vercel
+[2025-09-26 07:57:22] ✅ Deployed to Firebase
+[2025-09-26 07:57:22] ✅ Gunicorn started on port 3000 (PID 10266)
+[2025-09-26 07:57:22] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:57:24] ✅ Git push done (secrets excluded)
+[2025-09-26 07:57:52] ✅ Deployed to Vercel
+[2025-09-26 07:57:57] ✅ Deployed to Firebase
+[2025-09-26 07:57:57] ✅ Gunicorn started on port 3000 (PID 10360)
+[2025-09-26 07:57:57] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:57:58] ✅ Git push done (secrets excluded)
+[2025-09-26 07:58:10] 🔹 Using Python at /home/runner/workspace/.pythonlibs/bin/python3
+[2025-09-26 07:58:10] ✅ All critical files exist.
+[2025-09-26 07:58:10] ✅ All secrets exist.
+[2025-09-26 07:58:10] ✅ Gunicorn started on port 3000 (PID 10447)
+[2025-09-26 07:58:26] ✅ Deployed to Vercel
+[2025-09-26 07:58:26] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:58:28] ✅ Git push done (secrets excluded)
+[2025-09-26 07:58:35] ✅ Deployed to Firebase
+[2025-09-26 07:58:35] ✅ Gunicorn started on port 3000 (PID 10529)
+[2025-09-26 07:58:35] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:58:37] ✅ Git push done (secrets excluded)
+[2025-09-26 07:59:00] ✅ Deployed to Vercel
+[2025-09-26 07:59:07] ✅ Deployed to Firebase
+[2025-09-26 07:59:07] ✅ Gunicorn started on port 3000 (PID 10626)
+[2025-09-26 07:59:07] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:59:08] ✅ Git push done (secrets excluded)
+[2025-09-26 07:59:17] ✅ Deployed to Vercel
+[2025-09-26 07:59:23] ✅ Deployed to Firebase
+[2025-09-26 07:59:23] ✅ Gunicorn started on port 3000 (PID 10722)
+[2025-09-26 07:59:39] ✅ Deployed to Vercel
+[2025-09-26 07:59:45] ✅ Deployed to Firebase
+[2025-09-26 07:59:45] ✅ Gunicorn started on port 3000 (PID 10769)
+[2025-09-26 07:59:45] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 07:59:47] ✅ Git push done (secrets excluded)
+[2025-09-26 08:00:16] ✅ Deployed to Vercel
+[2025-09-26 08:00:21] ✅ Deployed to Firebase
+[2025-09-26 08:00:21] ✅ Gunicorn started on port 3000 (PID 10863)
+[2025-09-26 08:00:21] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:00:23] ✅ Git push done (secrets excluded)
+[2025-09-26 08:00:52] ✅ Deployed to Vercel
+[2025-09-26 08:00:55] ❌ Command failed: ['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project'] -> Command '['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project']' died with <Signals.SIGINT: 2>.
+[2025-09-26 08:00:55] ✅ Deployed to Firebase
+[2025-09-26 08:00:55] ✅ Gunicorn started on port 3000 (PID 10955)
+[2025-09-26 08:00:55] ⏹️ Terminating Gunicorn...
+[2025-09-26 08:00:55] ⏹️ Terminating Gunicorn...
+[2025-09-26 08:05:34] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:05:34] ✅ Git push done (secrets excluded)
+[2025-09-26 08:06:03] ✅ Deployed to Vercel
+[2025-09-26 08:06:08] ✅ Deployed to Firebase
+[2025-09-26 08:06:08] ✅ Gunicorn started on port 3000 (PID 11183)
+[2025-09-26 08:06:08] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:06:09] ✅ Git push done (secrets excluded)
+[2025-09-26 08:06:39] ✅ Deployed to Vercel
+[2025-09-26 08:06:44] ✅ Deployed to Firebase
+[2025-09-26 08:06:44] ✅ Gunicorn started on port 3000 (PID 11280)
+[2025-09-26 08:06:44] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:06:45] ✅ Git push done (secrets excluded)
+[2025-09-26 08:07:12] ✅ Deployed to Vercel
+[2025-09-26 08:07:18] ✅ Deployed to Firebase
+[2025-09-26 08:07:18] ✅ Gunicorn started on port 3000 (PID 12018)
+[2025-09-26 08:08:46] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:08:47] ✅ Git push done (secrets excluded)
+[2025-09-26 08:09:17] ✅ Deployed to Vercel
+[2025-09-26 08:09:25] ✅ Deployed to Firebase
+[2025-09-26 08:09:25] ✅ Gunicorn started on port 3000 (PID 12235)
+[2025-09-26 08:14:24] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:14:25] ✅ Git push done (secrets excluded)
+[2025-09-26 08:14:54] ✅ Deployed to Vercel
+[2025-09-26 08:14:59] ✅ Deployed to Firebase
+[2025-09-26 08:14:59] ✅ Gunicorn started on port 3000 (PID 12513)
+[2025-09-26 08:14:59] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:15:01] ✅ Git push done (secrets excluded)
+[2025-09-26 08:15:31] ✅ Deployed to Vercel
+[2025-09-26 08:15:36] ✅ Deployed to Firebase
+[2025-09-26 08:15:36] 🔹 Gunicorn already running (PID 12513)
+[2025-09-26 08:15:36] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:15:37] ✅ Git push done (secrets excluded)
+[2025-09-26 08:16:05] ✅ Deployed to Vercel
+[2025-09-26 08:16:09] ✅ Deployed to Firebase
+[2025-09-26 08:16:09] 🔹 Gunicorn already running (PID 12513)
+[2025-09-26 08:16:09] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:16:10] ✅ Git push done (secrets excluded)
+[2025-09-26 08:16:39] ✅ Deployed to Vercel
+[2025-09-26 08:16:57] 🔹 Using Python at /home/runner/workspace/.pythonlibs/bin/python
+[2025-09-26 08:16:57] ✅ All critical files exist.
+[2025-09-26 08:16:57] ✅ All secrets exist.
+[2025-09-26 08:16:57] ✅ Gunicorn started on port 3000 (PID 12854)
+[2025-09-26 08:18:11] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 08:18:12] ✅ Git push done (secrets excluded)
+[2025-09-26 08:18:53] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' died with <Signals.SIGINT: 2>.
+[2025-09-26 08:18:53] ✅ Deployed to Vercel
+[2025-09-26 08:18:55] ❌ Command failed: ['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project'] -> Command '['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project']' died with <Signals.SIGINT: 2>.
+[2025-09-26 08:18:55] ✅ Deployed to Firebase
+[2025-09-26 08:18:55] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:26:19] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:26:19] ⚠️ Missing critical files: ['templates/index.html', 'static/style.css', 'static/script.js', 'static/icon.png', 'static/ting.mp3']
+[2025-09-26 10:26:19] ✅ All secrets exist.
+[2025-09-26 10:26:19] ✅ Gunicorn started on port 3000 (PID 14636)
+[2025-09-26 10:26:20] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:26:21] ✅ Git push done (secrets excluded)
+[2025-09-26 10:26:42] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' died with <Signals.SIGINT: 2>.
+[2025-09-26 10:26:42] ✅ Deployed to Vercel
+[2025-09-26 10:26:48] ✅ Deployed to Firebase
+[2025-09-26 10:26:48] ✅ Gunicorn started on port 3000 (PID 14706)
+[2025-09-26 10:26:48] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:28:19] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:28:19] ✅ All critical files exist.
+[2025-09-26 10:28:19] ✅ All secrets exist.
+[2025-09-26 10:28:19] ✅ Server started on port 3000 (PID 14755)
+[2025-09-26 10:29:10] ⏹️ Terminating server...
+[2025-09-26 10:29:10] ⏹️ Terminating server...
+[2025-09-26 10:30:03] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:30:03] ✅ All critical files exist.
+[2025-09-26 10:30:03] ✅ All secrets exist.
+[2025-09-26 10:30:03] ⏹️ Killed process 13030 on port 3000
+[2025-09-26 10:30:03] ⏹️ Killed process 13038 on port 3000
+[2025-09-26 10:30:03] ⏹️ Killed process 13039 on port 3000
+[2025-09-26 10:30:03] ⏹️ Killed process 13040 on port 3000
+[2025-09-26 10:30:03] ⏹️ Killed process 13041 on port 3000
+[2025-09-26 10:30:03] ✅ Server started on port 3000 (PID 14800)
+[2025-09-26 10:30:04] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:30:06] ✅ Git push done (secrets excluded)
+[2025-09-26 10:30:38] ✅ Deployed to Vercel
+[2025-09-26 10:30:43] ✅ Deployed to Firebase
+[2025-09-26 10:30:43] ⏹️ Killed process 14800 on port 3000
+[2025-09-26 10:30:43] ⏹️ Killed process 14804 on port 3000
+[2025-09-26 10:30:43] ⏹️ Killed process 14805 on port 3000
+[2025-09-26 10:30:43] ⏹️ Killed process 14808 on port 3000
+[2025-09-26 10:30:43] ⏹️ Killed process 14809 on port 3000
+[2025-09-26 10:30:43] ✅ Server started on port 3000 (PID 14906)
+[2025-09-26 10:30:43] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:30:44] ✅ Git push done (secrets excluded)
+[2025-09-26 10:30:49] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' died with <Signals.SIGINT: 2>.
+[2025-09-26 10:30:49] ✅ Deployed to Vercel
+[2025-09-26 10:30:51] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:32:56] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:32:56] ✅ All critical files exist.
+[2025-09-26 10:32:56] ✅ All secrets exist.
+[2025-09-26 10:32:56] ✅ Server started on port 3000 (PID 15032)
+[2025-09-26 10:32:57] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:32:58] ✅ Git push done (secrets excluded)
+[2025-09-26 10:33:30] ✅ Deployed to Vercel
+[2025-09-26 10:33:35] ✅ Deployed to Firebase
+[2025-09-26 10:33:35] ⏹️ Killed process 15032 on port 3000
+[2025-09-26 10:33:35] ⏹️ Killed process 15036 on port 3000
+[2025-09-26 10:33:35] ⏹️ Killed process 15040 on port 3000
+[2025-09-26 10:33:35] ⏹️ Killed process 15044 on port 3000
+[2025-09-26 10:33:35] ⏹️ Killed process 15045 on port 3000
+[2025-09-26 10:33:35] ✅ Server started on port 3000 (PID 15138)
+[2025-09-26 10:33:35] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:33:36] ✅ Git push done (secrets excluded)
+[2025-09-26 10:34:07] ✅ Deployed to Vercel
+[2025-09-26 10:34:12] ✅ Deployed to Firebase
+[2025-09-26 10:34:12] ⏹️ Killed process 15138 on port 3000
+[2025-09-26 10:34:12] ⏹️ Killed process 15158 on port 3000
+[2025-09-26 10:34:12] ⏹️ Killed process 15159 on port 3000
+[2025-09-26 10:34:12] ⏹️ Killed process 15160 on port 3000
+[2025-09-26 10:34:12] ⏹️ Killed process 15161 on port 3000
+[2025-09-26 10:34:12] ✅ Server started on port 3000 (PID 15222)
+[2025-09-26 10:34:12] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:34:14] ✅ Git push done (secrets excluded)
+[2025-09-26 10:34:51] ✅ Deployed to Vercel
+[2025-09-26 10:34:56] ✅ Deployed to Firebase
+[2025-09-26 10:34:56] ⏹️ Killed process 15222 on port 3000
+[2025-09-26 10:34:56] ⏹️ Killed process 15259 on port 3000
+[2025-09-26 10:34:56] ⏹️ Killed process 15260 on port 3000
+[2025-09-26 10:34:56] ⏹️ Killed process 15261 on port 3000
+[2025-09-26 10:34:56] ⏹️ Killed process 15262 on port 3000
+[2025-09-26 10:34:56] ✅ Server started on port 3000 (PID 15322)
+[2025-09-26 10:34:56] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:34:58] ✅ Git push done (secrets excluded)
+[2025-09-26 10:35:30] ✅ Deployed to Vercel
+[2025-09-26 10:35:35] ✅ Deployed to Firebase
+[2025-09-26 10:35:35] ⏹️ Killed process 15322 on port 3000
+[2025-09-26 10:35:35] ⏹️ Killed process 15358 on port 3000
+[2025-09-26 10:35:35] ⏹️ Killed process 15359 on port 3000
+[2025-09-26 10:35:35] ⏹️ Killed process 15360 on port 3000
+[2025-09-26 10:35:35] ⏹️ Killed process 15361 on port 3000
+[2025-09-26 10:35:35] ✅ Server started on port 3000 (PID 15421)
+[2025-09-26 10:35:35] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:35:37] ✅ Git push done (secrets excluded)
+[2025-09-26 10:36:09] ✅ Deployed to Vercel
+[2025-09-26 10:36:14] ✅ Deployed to Firebase
+[2025-09-26 10:36:14] ⏹️ Killed process 15421 on port 3000
+[2025-09-26 10:36:14] ⏹️ Killed process 15459 on port 3000
+[2025-09-26 10:36:14] ⏹️ Killed process 15460 on port 3000
+[2025-09-26 10:36:14] ⏹️ Killed process 15461 on port 3000
+[2025-09-26 10:36:14] ⏹️ Killed process 15462 on port 3000
+[2025-09-26 10:36:14] ✅ Server started on port 3000 (PID 15522)
+[2025-09-26 10:36:14] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:36:15] ✅ Git push done (secrets excluded)
+[2025-09-26 10:36:47] ✅ Deployed to Vercel
+[2025-09-26 10:36:52] ✅ Deployed to Firebase
+[2025-09-26 10:36:52] ⏹️ Killed process 15522 on port 3000
+[2025-09-26 10:36:52] ⏹️ Killed process 15558 on port 3000
+[2025-09-26 10:36:52] ⏹️ Killed process 15559 on port 3000
+[2025-09-26 10:36:52] ⏹️ Killed process 15560 on port 3000
+[2025-09-26 10:36:52] ⏹️ Killed process 15561 on port 3000
+[2025-09-26 10:36:52] ✅ Server started on port 3000 (PID 15621)
+[2025-09-26 10:36:52] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:36:53] ✅ Git push done (secrets excluded)
+[2025-09-26 10:37:26] ✅ Deployed to Vercel
+[2025-09-26 10:37:31] ✅ Deployed to Firebase
+[2025-09-26 10:37:31] ⏹️ Killed process 15621 on port 3000
+[2025-09-26 10:37:31] ⏹️ Killed process 15652 on port 3000
+[2025-09-26 10:37:31] ⏹️ Killed process 15658 on port 3000
+[2025-09-26 10:37:31] ⏹️ Killed process 15659 on port 3000
+[2025-09-26 10:37:31] ⏹️ Killed process 15661 on port 3000
+[2025-09-26 10:37:31] ✅ Server started on port 3000 (PID 15721)
+[2025-09-26 10:40:07] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:40:07] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:50:50] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:50:50] ✅ All critical files exist.
+[2025-09-26 10:50:50] ✅ All secrets exist.
+[2025-09-26 10:50:50] ✅ Server started on port 3000 (PID 15905)
+[2025-09-26 10:53:03] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:53:04] ✅ Git push done (secrets excluded)
+[2025-09-26 10:53:35] ✅ Deployed to Vercel
+[2025-09-26 10:53:41] ✅ Deployed to Firebase
+[2025-09-26 10:53:41] ⏹️ Killed process 15905 on port 3000
+[2025-09-26 10:53:41] ⏹️ Killed process 15910 on port 3000
+[2025-09-26 10:53:41] ⏹️ Killed process 15911 on port 3000
+[2025-09-26 10:53:41] ⏹️ Killed process 15912 on port 3000
+[2025-09-26 10:53:41] ⏹️ Killed process 15913 on port 3000
+[2025-09-26 10:53:41] ✅ Server started on port 3000 (PID 16015)
+[2025-09-26 10:53:41] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:53:42] ✅ Git push done (secrets excluded)
+[2025-09-26 10:54:14] ✅ Deployed to Vercel
+[2025-09-26 10:54:19] ✅ Deployed to Firebase
+[2025-09-26 10:54:19] ⏹️ Killed process 16015 on port 3000
+[2025-09-26 10:54:19] ⏹️ Killed process 16035 on port 3000
+[2025-09-26 10:54:19] ⏹️ Killed process 16036 on port 3000
+[2025-09-26 10:54:19] ⏹️ Killed process 16037 on port 3000
+[2025-09-26 10:54:19] ⏹️ Killed process 16038 on port 3000
+[2025-09-26 10:54:19] ✅ Server started on port 3000 (PID 16106)
+[2025-09-26 10:54:19] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:54:21] ✅ Git push done (secrets excluded)
+[2025-09-26 10:54:55] ✅ Deployed to Vercel
+[2025-09-26 10:55:01] ✅ Deployed to Firebase
+[2025-09-26 10:55:01] ⏹️ Killed process 16106 on port 3000
+[2025-09-26 10:55:01] ⏹️ Killed process 16147 on port 3000
+[2025-09-26 10:55:01] ⏹️ Killed process 16148 on port 3000
+[2025-09-26 10:55:01] ⏹️ Killed process 16150 on port 3000
+[2025-09-26 10:55:01] ⏹️ Killed process 16152 on port 3000
+[2025-09-26 10:55:01] ✅ Server started on port 3000 (PID 16235)
+[2025-09-26 10:55:01] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:55:02] ✅ Git push done (secrets excluded)
+[2025-09-26 10:55:13] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:55:13] ✅ Deployed to Vercel
+[2025-09-26 10:55:18] ✅ Deployed to Firebase
+[2025-09-26 10:55:18] ⏹️ Killed process 16235 on port 3000
+[2025-09-26 10:55:18] ⏹️ Killed process 16255 on port 3000
+[2025-09-26 10:55:18] ⏹️ Killed process 16256 on port 3000
+[2025-09-26 10:55:18] ⏹️ Killed process 16257 on port 3000
+[2025-09-26 10:55:18] ⏹️ Killed process 16258 on port 3000
+[2025-09-26 10:55:18] ✅ Server started on port 3000 (PID 16347)
+[2025-09-26 10:55:18] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:55:19] ✅ Git push done (secrets excluded)
+[2025-09-26 10:55:29] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:55:30] ✅ Deployed to Vercel
+[2025-09-26 10:55:34] ✅ Deployed to Firebase
+[2025-09-26 10:55:34] ⏹️ Killed process 16347 on port 3000
+[2025-09-26 10:55:34] ⏹️ Killed process 16367 on port 3000
+[2025-09-26 10:55:34] ⏹️ Killed process 16368 on port 3000
+[2025-09-26 10:55:34] ⏹️ Killed process 16369 on port 3000
+[2025-09-26 10:55:34] ⏹️ Killed process 16370 on port 3000
+[2025-09-26 10:55:34] ✅ Server started on port 3000 (PID 16439)
+[2025-09-26 10:55:34] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:55:35] ✅ Git push done (secrets excluded)
+[2025-09-26 10:55:46] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:55:46] ✅ Deployed to Vercel
+[2025-09-26 10:55:51] ✅ Deployed to Firebase
+[2025-09-26 10:55:51] ⏹️ Killed process 16439 on port 3000
+[2025-09-26 10:55:51] ⏹️ Killed process 16468 on port 3000
+[2025-09-26 10:55:51] ⏹️ Killed process 16469 on port 3000
+[2025-09-26 10:55:51] ⏹️ Killed process 16470 on port 3000
+[2025-09-26 10:55:51] ⏹️ Killed process 16471 on port 3000
+[2025-09-26 10:55:51] ✅ Server started on port 3000 (PID 16532)
+[2025-09-26 10:55:51] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:55:52] ✅ Git push done (secrets excluded)
+[2025-09-26 10:56:02] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:56:02] ✅ Deployed to Vercel
+[2025-09-26 10:56:08] ✅ Deployed to Firebase
+[2025-09-26 10:56:08] ⏹️ Killed process 16532 on port 3000
+[2025-09-26 10:56:08] ⏹️ Killed process 16568 on port 3000
+[2025-09-26 10:56:08] ⏹️ Killed process 16569 on port 3000
+[2025-09-26 10:56:08] ⏹️ Killed process 16570 on port 3000
+[2025-09-26 10:56:08] ⏹️ Killed process 16571 on port 3000
+[2025-09-26 10:56:08] ✅ Server started on port 3000 (PID 16661)
+[2025-09-26 10:56:08] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:56:10] ✅ Git push done (secrets excluded)
+[2025-09-26 10:56:21] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:56:21] ✅ Deployed to Vercel
+[2025-09-26 10:56:26] ❌ Command failed: ['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project'] -> Command '['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project']' died with <Signals.SIGINT: 2>.
+[2025-09-26 10:56:26] ✅ Deployed to Firebase
+[2025-09-26 10:56:26] ⏹️ Killed process 16689 on port 3000
+[2025-09-26 10:56:26] ⏹️ Killed process 16690 on port 3000
+[2025-09-26 10:56:26] ⏹️ Killed process 16695 on port 3000
+[2025-09-26 10:56:26] ⏹️ Killed process 16696 on port 3000
+[2025-09-26 10:56:26] 🔹 Gunicorn already running (PID 16661)
+[2025-09-26 10:56:26] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:56:26] ⏹️ Terminating Gunicorn...
+[2025-09-26 10:56:35] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 10:56:35] ✅ All critical files exist.
+[2025-09-26 10:56:35] ✅ All secrets exist.
+[2025-09-26 10:56:35] ✅ Server started on port 3000 (PID 16787)
+[2025-09-26 10:59:09] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:59:10] ✅ Git push done (secrets excluded)
+[2025-09-26 10:59:17] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:59:17] ✅ Deployed to Vercel
+[2025-09-26 10:59:22] ✅ Deployed to Firebase
+[2025-09-26 10:59:22] ⏹️ Killed process 16787 on port 3000
+[2025-09-26 10:59:22] ⏹️ Killed process 16791 on port 3000
+[2025-09-26 10:59:22] ⏹️ Killed process 16792 on port 3000
+[2025-09-26 10:59:22] ⏹️ Killed process 16793 on port 3000
+[2025-09-26 10:59:22] ⏹️ Killed process 16794 on port 3000
+[2025-09-26 10:59:22] ✅ Server started on port 3000 (PID 16888)
+[2025-09-26 10:59:22] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:59:24] ✅ Git push done (secrets excluded)
+[2025-09-26 10:59:34] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:59:34] ✅ Deployed to Vercel
+[2025-09-26 10:59:38] ✅ Deployed to Firebase
+[2025-09-26 10:59:38] ⏹️ Killed process 16888 on port 3000
+[2025-09-26 10:59:38] ⏹️ Killed process 16901 on port 3000
+[2025-09-26 10:59:38] ⏹️ Killed process 16902 on port 3000
+[2025-09-26 10:59:38] ⏹️ Killed process 16910 on port 3000
+[2025-09-26 10:59:38] ⏹️ Killed process 16911 on port 3000
+[2025-09-26 10:59:39] ✅ Server started on port 3000 (PID 16980)
+[2025-09-26 10:59:39] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:59:40] ✅ Git push done (secrets excluded)
+[2025-09-26 10:59:50] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 10:59:50] ✅ Deployed to Vercel
+[2025-09-26 10:59:55] ✅ Deployed to Firebase
+[2025-09-26 10:59:55] ⏹️ Killed process 16980 on port 3000
+[2025-09-26 10:59:55] ⏹️ Killed process 17008 on port 3000
+[2025-09-26 10:59:55] ⏹️ Killed process 17009 on port 3000
+[2025-09-26 10:59:55] ⏹️ Killed process 17010 on port 3000
+[2025-09-26 10:59:55] ⏹️ Killed process 17011 on port 3000
+[2025-09-26 10:59:55] ✅ Server started on port 3000 (PID 17073)
+[2025-09-26 10:59:55] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 10:59:56] ✅ Git push done (secrets excluded)
+[2025-09-26 11:00:07] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:00:07] ✅ Deployed to Vercel
+[2025-09-26 11:00:11] ✅ Deployed to Firebase
+[2025-09-26 11:00:12] ⏹️ Killed process 17073 on port 3000
+[2025-09-26 11:00:12] ⏹️ Killed process 17108 on port 3000
+[2025-09-26 11:00:12] ⏹️ Killed process 17109 on port 3000
+[2025-09-26 11:00:12] ⏹️ Killed process 17110 on port 3000
+[2025-09-26 11:00:12] ⏹️ Killed process 17111 on port 3000
+[2025-09-26 11:00:12] ✅ Server started on port 3000 (PID 17172)
+[2025-09-26 11:00:12] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:00:13] ✅ Git push done (secrets excluded)
+[2025-09-26 11:00:22] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:00:22] ✅ Deployed to Vercel
+[2025-09-26 11:00:27] ✅ Deployed to Firebase
+[2025-09-26 11:00:27] ⏹️ Killed process 17172 on port 3000
+[2025-09-26 11:00:27] ⏹️ Killed process 17209 on port 3000
+[2025-09-26 11:00:27] ⏹️ Killed process 17210 on port 3000
+[2025-09-26 11:00:27] ⏹️ Killed process 17211 on port 3000
+[2025-09-26 11:00:27] ⏹️ Killed process 17212 on port 3000
+[2025-09-26 11:00:27] ✅ Server started on port 3000 (PID 17279)
+[2025-09-26 11:00:27] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:00:29] ✅ Git push done (secrets excluded)
+[2025-09-26 11:00:38] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:00:38] ✅ Deployed to Vercel
+[2025-09-26 11:00:43] ✅ Deployed to Firebase
+[2025-09-26 11:00:43] ⏹️ Killed process 17279 on port 3000
+[2025-09-26 11:00:43] ⏹️ Killed process 17311 on port 3000
+[2025-09-26 11:00:43] ⏹️ Killed process 17313 on port 3000
+[2025-09-26 11:00:43] ⏹️ Killed process 17314 on port 3000
+[2025-09-26 11:00:43] ⏹️ Killed process 17319 on port 3000
+[2025-09-26 11:00:43] ✅ Server started on port 3000 (PID 17374)
+[2025-09-26 11:00:43] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:00:44] ✅ Git push done (secrets excluded)
+[2025-09-26 11:00:55] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:00:55] ✅ Deployed to Vercel
+[2025-09-26 11:01:00] ✅ Deployed to Firebase
+[2025-09-26 11:01:00] ⏹️ Killed process 17374 on port 3000
+[2025-09-26 11:01:00] ⏹️ Killed process 17411 on port 3000
+[2025-09-26 11:01:00] ⏹️ Killed process 17412 on port 3000
+[2025-09-26 11:01:00] ⏹️ Killed process 17413 on port 3000
+[2025-09-26 11:01:00] ⏹️ Killed process 17414 on port 3000
+[2025-09-26 11:01:00] ✅ Server started on port 3000 (PID 17484)
+[2025-09-26 11:02:00] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:02:01] ✅ Git push done (secrets excluded)
+[2025-09-26 11:02:08] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:02:08] ✅ Deployed to Vercel
+[2025-09-26 11:02:13] ✅ Deployed to Firebase
+[2025-09-26 11:02:13] ⏹️ Killed process 17484 on port 3000
+[2025-09-26 11:02:13] ⏹️ Killed process 17493 on port 3000
+[2025-09-26 11:02:13] ⏹️ Killed process 17494 on port 3000
+[2025-09-26 11:02:13] ⏹️ Killed process 17495 on port 3000
+[2025-09-26 11:02:13] ⏹️ Killed process 17496 on port 3000
+[2025-09-26 11:02:13] ✅ Server started on port 3000 (PID 17595)
+[2025-09-26 11:02:13] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:02:14] ✅ Git push done (secrets excluded)
+[2025-09-26 11:02:24] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:02:24] ✅ Deployed to Vercel
+[2025-09-26 11:02:30] ✅ Deployed to Firebase
+[2025-09-26 11:02:30] ⏹️ Killed process 17595 on port 3000
+[2025-09-26 11:02:30] ⏹️ Killed process 17631 on port 3000
+[2025-09-26 11:02:30] ⏹️ Killed process 17632 on port 3000
+[2025-09-26 11:02:30] ⏹️ Killed process 17634 on port 3000
+[2025-09-26 11:02:30] ⏹️ Killed process 17635 on port 3000
+[2025-09-26 11:02:30] ✅ Server started on port 3000 (PID 17712)
+[2025-09-26 11:02:30] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:02:31] ✅ Git push done (secrets excluded)
+[2025-09-26 11:02:41] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:02:41] ✅ Deployed to Vercel
+[2025-09-26 11:02:46] ✅ Deployed to Firebase
+[2025-09-26 11:02:46] ⏹️ Killed process 17712 on port 3000
+[2025-09-26 11:02:46] ⏹️ Killed process 17732 on port 3000
+[2025-09-26 11:02:46] ⏹️ Killed process 17733 on port 3000
+[2025-09-26 11:02:46] ⏹️ Killed process 17734 on port 3000
+[2025-09-26 11:02:46] ⏹️ Killed process 17735 on port 3000
+[2025-09-26 11:02:46] ✅ Server started on port 3000 (PID 17804)
+[2025-09-26 11:02:50] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:02:52] ✅ Git push done (secrets excluded)
+[2025-09-26 11:03:00] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:03:00] ✅ Deployed to Vercel
+[2025-09-26 11:03:06] ✅ Deployed to Firebase
+[2025-09-26 11:03:06] ⏹️ Killed process 17804 on port 3000
+[2025-09-26 11:03:06] ⏹️ Killed process 17814 on port 3000
+[2025-09-26 11:03:06] ⏹️ Killed process 17815 on port 3000
+[2025-09-26 11:03:06] ⏹️ Killed process 17816 on port 3000
+[2025-09-26 11:03:06] ⏹️ Killed process 17817 on port 3000
+[2025-09-26 11:03:06] ✅ Server started on port 3000 (PID 17925)
+[2025-09-26 11:03:06] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:03:08] ✅ Git push done (secrets excluded)
+[2025-09-26 11:03:17] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:03:17] ✅ Deployed to Vercel
+[2025-09-26 11:03:22] ✅ Deployed to Firebase
+[2025-09-26 11:03:22] ⏹️ Killed process 17925 on port 3000
+[2025-09-26 11:03:22] ⏹️ Killed process 17945 on port 3000
+[2025-09-26 11:03:22] ⏹️ Killed process 17946 on port 3000
+[2025-09-26 11:03:22] ⏹️ Killed process 17947 on port 3000
+[2025-09-26 11:03:22] ⏹️ Killed process 17948 on port 3000
+[2025-09-26 11:03:23] ✅ Server started on port 3000 (PID 18022)
+[2025-09-26 11:03:29] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:03:30] ✅ Git push done (secrets excluded)
+[2025-09-26 11:03:36] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:03:36] ✅ Deployed to Vercel
+[2025-09-26 11:03:42] ✅ Deployed to Firebase
+[2025-09-26 11:03:42] ⏹️ Killed process 18022 on port 3000
+[2025-09-26 11:03:42] ⏹️ Killed process 18039 on port 3000
+[2025-09-26 11:03:42] ⏹️ Killed process 18040 on port 3000
+[2025-09-26 11:03:42] ⏹️ Killed process 18041 on port 3000
+[2025-09-26 11:03:42] ⏹️ Killed process 18042 on port 3000
+[2025-09-26 11:03:42] ✅ Server started on port 3000 (PID 18139)
+[2025-09-26 11:04:04] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:04:05] ✅ Git push done (secrets excluded)
+[2025-09-26 11:04:12] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:04:12] ✅ Deployed to Vercel
+[2025-09-26 11:04:17] ✅ Deployed to Firebase
+[2025-09-26 11:04:17] ⏹️ Killed process 18139 on port 3000
+[2025-09-26 11:04:17] ⏹️ Killed process 18140 on port 3000
+[2025-09-26 11:04:17] ⏹️ Killed process 18141 on port 3000
+[2025-09-26 11:04:17] ⏹️ Killed process 18142 on port 3000
+[2025-09-26 11:04:17] ⏹️ Killed process 18143 on port 3000
+[2025-09-26 11:04:17] ✅ Server started on port 3000 (PID 18253)
+[2025-09-26 11:04:44] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:04:45] ✅ Git push done (secrets excluded)
+[2025-09-26 11:04:51] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:04:51] ✅ Deployed to Vercel
+[2025-09-26 11:04:57] ✅ Deployed to Firebase
+[2025-09-26 11:04:57] ⏹️ Killed process 18253 on port 3000
+[2025-09-26 11:04:57] ⏹️ Killed process 18254 on port 3000
+[2025-09-26 11:04:57] ⏹️ Killed process 18255 on port 3000
+[2025-09-26 11:04:57] ⏹️ Killed process 18256 on port 3000
+[2025-09-26 11:04:57] ⏹️ Killed process 18257 on port 3000
+[2025-09-26 11:04:57] ✅ Server started on port 3000 (PID 18364)
+[2025-09-26 11:05:02] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:05:04] ✅ Git push done (secrets excluded)
+[2025-09-26 11:05:09] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:05:09] ✅ Deployed to Vercel
+[2025-09-26 11:05:15] ✅ Deployed to Firebase
+[2025-09-26 11:05:15] ⏹️ Killed process 18364 on port 3000
+[2025-09-26 11:05:15] ⏹️ Killed process 18365 on port 3000
+[2025-09-26 11:05:15] ⏹️ Killed process 18366 on port 3000
+[2025-09-26 11:05:15] ⏹️ Killed process 18367 on port 3000
+[2025-09-26 11:05:15] ⏹️ Killed process 18368 on port 3000
+[2025-09-26 11:05:15] ✅ Server started on port 3000 (PID 18465)
+[2025-09-26 11:05:15] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:05:16] ✅ Git push done (secrets excluded)
+[2025-09-26 11:05:26] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:05:26] ✅ Deployed to Vercel
+[2025-09-26 11:05:32] ✅ Deployed to Firebase
+[2025-09-26 11:05:32] ⏹️ Killed process 18465 on port 3000
+[2025-09-26 11:05:32] ⏹️ Killed process 18485 on port 3000
+[2025-09-26 11:05:32] ⏹️ Killed process 18486 on port 3000
+[2025-09-26 11:05:32] ⏹️ Killed process 18487 on port 3000
+[2025-09-26 11:05:32] ⏹️ Killed process 18488 on port 3000
+[2025-09-26 11:05:32] ✅ Server started on port 3000 (PID 18577)
+[2025-09-26 11:05:38] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:05:38] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:05:54] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 11:05:54] ⚠️ Missing critical files: ['public/script.js']
+[2025-09-26 11:05:54] ✅ All secrets exist.
+[2025-09-26 11:05:55] ✅ Server started on port 3000 (PID 18596)
+[2025-09-26 11:05:55] 🌐 Access Liz AI at: http://localhost:3000
+[2025-09-26 11:06:56] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:06:57] ✅ Git push done (secrets excluded)
+[2025-09-26 11:07:03] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:07:03] ✅ Deployed to Vercel
+[2025-09-26 11:07:06] ❌ Command failed: ['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project'] -> Command '['firebase', 'deploy', '--only', 'hosting', '--project', 'liz-ai-project']' died with <Signals.SIGINT: 2>.
+[2025-09-26 11:07:06] ✅ Deployed to Firebase
+[2025-09-26 11:07:06] ⏹️ Killed process 1 on port 3000
+[2025-09-26 11:07:06] ⏹️ Killed process 18597 on port 3000
+[2025-09-26 11:07:06] ⏹️ Killed process 18598 on port 3000
+[2025-09-26 11:07:06] ⏹️ Killed process 18599 on port 3000
+[2025-09-26 11:07:06] ⏹️ Killed process 18600 on port 3000
+[2025-09-26 11:07:06] 🔹 Gunicorn already running (PID 18596)
+[2025-09-26 11:07:06] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:07:06] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:07:14] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 11:07:14] ⚠️ Missing critical files: ['public/hub5.js']
+[2025-09-26 11:07:14] ✅ All secrets exist.
+[2025-09-26 11:07:15] ✅ Server started on port 3000 (PID 18704)
+[2025-09-26 11:07:15] 🌐 Access Liz AI at: http://localhost:3000
+[2025-09-26 11:07:30] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:07:30] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:07:45] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 11:07:45] ✅ All critical files exist.
+[2025-09-26 11:07:45] ✅ All secrets exist.
+[2025-09-26 11:07:46] ✅ Server started on port 3000 (PID 18735)
+[2025-09-26 11:07:46] 🌐 Access Liz AI at: http://localhost:3000
+[2025-09-26 11:09:12] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:09:13] ✅ Git push done (secrets excluded)
+[2025-09-26 11:09:19] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:09:19] ✅ Deployed to Vercel
+[2025-09-26 11:09:24] ✅ Deployed to Firebase
+[2025-09-26 11:09:25] ⏹️ Killed process 18735 on port 3000
+[2025-09-26 11:09:25] ⏹️ Killed process 18736 on port 3000
+[2025-09-26 11:09:25] ⏹️ Killed process 18737 on port 3000
+[2025-09-26 11:09:25] ⏹️ Killed process 18738 on port 3000
+[2025-09-26 11:09:25] ⏹️ Killed process 18740 on port 3000
+[2025-09-26 11:09:26] ✅ Server started on port 3000 (PID 18832)
+[2025-09-26 11:09:26] 🌐 Access Liz AI at: http://localhost:3000
+[2025-09-26 11:09:26] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:09:27] ✅ Git push done (secrets excluded)
+[2025-09-26 11:09:36] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' returned non-zero exit status 1.
+[2025-09-26 11:09:36] ✅ Deployed to Vercel
+[2025-09-26 11:09:41] ✅ Deployed to Firebase
+[2025-09-26 11:09:41] ⏹️ Killed process 18832 on port 3000
+[2025-09-26 11:09:41] ⏹️ Killed process 18862 on port 3000
+[2025-09-26 11:09:42] ⏹️ Killed process 18863 on port 3000
+[2025-09-26 11:09:42] ⏹️ Killed process 18864 on port 3000
+[2025-09-26 11:09:42] ⏹️ Killed process 18865 on port 3000
+[2025-09-26 11:09:43] ✅ Server started on port 3000 (PID 18943)
+[2025-09-26 11:09:43] 🌐 Access Liz AI at: http://localhost:3000
+[2025-09-26 11:09:43] 🔹 Changes detected: committing, deploying, restarting app...
+[2025-09-26 11:09:44] ✅ Git push done (secrets excluded)
+[2025-09-26 11:09:49] ❌ Command failed: ['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2'] -> Command '['vercel', '--prod', '--yes', '--token', 'NeLXPswQ0qzJAJaRGjMkeGF2']' died with <Signals.SIGINT: 2>.
+[2025-09-26 11:09:49] ✅ Deployed to Vercel
+[2025-09-26 11:09:52] ⏹️ Terminating Gunicorn...
+[2025-09-26 11:10:06] 🔹 Using Python at /nix/store/nki9ywqzbvz68vr75kn2r7g1q84f5agy-python3-3.9.6/bin/python
+[2025-09-26 11:10:06] ✅ All critical files exist.
+[2025-09-26 11:10:06] ✅ All secrets exist.
+[2025-09-26 11:10:07] ✅ Server started on port 3000 (PID 19027)
+[2025-09-26 11:10:07] 🌐 Access Liz AI at: http://localhost:3000
