@@ -3,46 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ultimate Liz HUD Iron Man 3D</title>
-    <link rel="stylesheet" href="/static/style.css" />
+    <title>Liz AI HUD</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="container">
       <canvas id="hudCanvas"></canvas>
-      <svg
-        id="helmetSVG"
-        viewBox="0 0 500 600"
-        preserveAspectRatio="xMidYMid meet"
-      >
+
+      <!-- Helmet SVG overlay -->
+      <svg id="helmetSVG" viewBox="0 0 200 200">
         <path
-          d="M100,0 L400,0 C450,50 450,550 400,600 L100,600 C50,550 50,50 100,0 Z"
-          fill="rgba(0,0,0,0.5)"
-          stroke="#00ff88"
+          d="M50,50 L150,50 L150,150 L50,150 Z"
           stroke-width="4"
+          fill="rgba(0,0,0,0.5)"
         />
       </svg>
+
+      <!-- Center icon -->
       <div id="icon">🤖</div>
+
+      <!-- Info popup -->
       <div id="popup"></div>
+
+      <!-- Audio elements -->
       <audio id="ttsAudio"></audio>
-      <audio id="ting" src="/static/ting.mp3" preload="auto"></audio>
+      <audio id="ting"></audio>
     </div>
 
-    <!-- ตรวจสอบ script path ถูกต้องและรันหลัง DOM โหลด -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const canvas = document.getElementById("hudCanvas");
-        if (!canvas) {
-          console.error("Canvas not found!");
-          return;
-        }
-        const ctx = canvas.getContext("2d");
-        console.log("Canvas loaded successfully", ctx);
-        // ใส่ script.js หลังตรวจสอบ canvas
-        const script = document.createElement("script");
-        script.src = "/static/script.js";
-        script.defer = true;
-        document.body.appendChild(script);
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
